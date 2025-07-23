@@ -37,7 +37,7 @@ namespace MinervaFoods.Application.Compradores.CompradorGetAll
         /// <returns>Retorna uma lista de <see cref="CompradorResult"/> contendo todos os compradores.</returns>
         public async Task<IEnumerable<PedidoResult>> Handle(PedidoGetAllCommand command, CancellationToken cancellationToken)
         {
-            var entities = await _repository.GetAllAsync(cancellationToken,"Comprador", "PedidoItem", "PedidoItem.Carnes");
+            var entities = await _repository.GetAllAsync(cancellationToken,"Comprador", "PedidoItem", "PedidoItem.Carne");
             return _mapper.Map<IEnumerable<PedidoResult>>(entities);
         }
     }

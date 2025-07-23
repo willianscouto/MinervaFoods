@@ -48,39 +48,60 @@ namespace MinervaFoods.Application.Pedidos.PedidoModify
         public async Task<PedidoResult> Handle(PedidoModifyCommand command, CancellationToken cancellationToken)
         {
             var pedido = await ValidateAsync(command, cancellationToken);
-            List<PedidoItem> allPedidosItens = new List<PedidoItem>();
+            List<PedidoItem> allPedidosItens = new();
 
-            var itemCarnesToKeep = command.PedidoItem.Where(x => x.CarneId != Guid.Empty).Select(x => x.CarneId);
-            var itemsToDelete = pedido.PedidoItem.Where(item => !itemCarnesToKeep.Contains(item.CarneId)).ToList();
+            
 
-            if (itemsToDelete.Count != 0)
+            var novaChaveItens = command.PedidoItem
+                .Select(x => new { x.CarneId, x.Moeda })
+                .ToHashSet();
+
+            var antigaChaveItens = pedido.PedidoItem
+                .Select(x => new { x.CarneId, x.Moeda })
+                .ToHashSet();
+
+         
+            var itensToDelete = pedido.PedidoItem
+                .Where(item => !novaChaveItens.Contains(new { item.CarneId, item.Moeda }))
+                .ToList();
+
+            if (itensToDelete.Any())
             {
-                var commandDelete = new PedidoItemDeleteCommand(itemsToDelete.Select(x => x.Id));
-                await _mediator.Send(commandDelete, cancellationToken); // Corrigido: estava chamando o command errado
+                var deleteCommand = new PedidoItemDeleteCommand(itensToDelete.Select(x => x.Id));
+                await _mediator.Send(deleteCommand, cancellationToken);
             }
 
-            var itemsToUpdate = pedido.PedidoItem
-                .Where(existing => command.PedidoItem.Any(c => c.CarneId == existing.CarneId && c.Quantidade != existing.Quantidade))
-                .Select(c => c.Id);
 
-            if (itemsToUpdate.Any())
+            var pedidoItensRestantes = pedido.PedidoItem
+                                                .Where(item => !itensToDelete.Any(del => del.CarneId == item.CarneId && del.Moeda == item.Moeda))
+                                                .ToList();
+
+            var itensToUpdate = command.PedidoItem
+                .Where(c =>
+                    pedidoItensRestantes.Any(item =>
+                        item.CarneId == c.CarneId &&
+                        item.Moeda == c.Moeda &&
+                        (c.Quantidade != item.Quantidade || c.PrecoUnitario != item.PrecoUnitario || c.Cotacao != item.Cotacao)))
+                .ToList();
+
+            if (itensToUpdate.Any())
             {
-                var itens = pedido.PedidoItem.Where(item => itemsToUpdate.Contains(item.Id));
-                var itensModify = _mapper.Map<IEnumerable<PedidoItemModifyItem>>(itens);
+                var itensModify = _mapper.Map<IEnumerable<PedidoItemModifyItem>>(itensToUpdate);
                 var commandUpdate = new PedidoItemModifyCommand { Itens = itensModify.ToList() };
                 var resultModify = await _mediator.Send(commandUpdate, cancellationToken);
                 allPedidosItens.AddRange(_mapper.Map<IEnumerable<PedidoItem>>(resultModify));
             }
 
-            var itemsToAdd = command.PedidoItem
-                .Where(existing => !pedido.PedidoItem.Any(c => c.CarneId == existing.CarneId))
-                .Select(c => c.CarneId);
+            var itensToAdd = command.PedidoItem
+                .Where(novo =>
+                    !pedidoItensRestantes.Any(existente =>
+                        existente.CarneId == novo.CarneId && existente.Moeda == novo.Moeda))
+                .ToList();
 
-            if (itemsToAdd.Any())
+            if (itensToAdd.Any())
             {
-                var pedidoCommandItemAdd = command.PedidoItem.Where(item => itemsToAdd.Contains(item.CarneId));
-                var itensCreate = _mapper.Map<IEnumerable<PedidoItemCreateItem>>(pedidoCommandItemAdd);
-                var commandCreate = new PedidoItemCreateCommand { Itens = itensCreate.ToList() };
+                var itensCreate = _mapper.Map<IEnumerable<PedidoItemCreateItem>>(itensToAdd);
+                var commandCreate = new PedidoItemCreateCommand { Itens = itensCreate.ToList(), PedidoId = pedido.Id };
                 var resultAdd = await _mediator.Send(commandCreate, cancellationToken);
                 allPedidosItens.AddRange(_mapper.Map<IEnumerable<PedidoItem>>(resultAdd));
             }
@@ -91,6 +112,7 @@ namespace MinervaFoods.Application.Pedidos.PedidoModify
 
             return _mapper.Map<PedidoResult>(pedido);
         }
+
 
         /// <summary>
         /// Valida o comando <see cref="PedidoModifyCommand"/> quanto às regras de negócio e integridade dos dados.
@@ -108,7 +130,7 @@ namespace MinervaFoods.Application.Pedidos.PedidoModify
             if (!validationResult.IsValid)
                 throw new ValidationException(validationResult.Errors);
 
-            var pedido = await _repository.GetByIdAsync(command.Id, cancellationToken);
+            var pedido = await _repository.GetByIdAsync(command.Id, cancellationToken, "PedidoItem");
             if (pedido == null)
                 throw new KeyNotFoundException($"Pedido com ID {command.Id} não foi encontrado.");
 

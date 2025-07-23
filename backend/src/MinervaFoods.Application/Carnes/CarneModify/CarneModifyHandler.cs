@@ -45,8 +45,8 @@ namespace MinervaFoods.Application.Carnes.CarneModify
                 command.UnidadeMedida
             );
 
-            var comment = _mapper.Map<Carne>(command);
-            var entity = await _repository.UpdateAsync(comment, cancellationToken);
+           
+            var entity = await _repository.UpdateAsync(carneToUpdate, cancellationToken);
 
             return _mapper.Map<CarneResult>(entity);
         }
@@ -69,11 +69,11 @@ namespace MinervaFoods.Application.Carnes.CarneModify
 
             var carneToUpdate = await _repository.GetByIdAsync(command.Id, cancellationToken);
             if (carneToUpdate == null)
-                throw new KeyNotFoundException($"Produto com ID {command.Id} não foi encontrado.");
+                throw new KeyNotFoundException($"Carne com ID {command.Id} não foi encontrado.");
 
             var sameEan = await _repository.FindAsync(p => p.Ean == command.Ean && p.Id != command.Id, cancellationToken);
             if (sameEan.Any())
-                throw new InvalidOperationException($"Já existe outro produto com o EAN {command.Ean}.");
+                throw new InvalidOperationException($"Já existe outra carne com o EAN {command.Ean}.");
 
             return carneToUpdate;
         }

@@ -14,6 +14,7 @@ namespace MinervaFoods.Application.PedidosItens.PedidoItemCreate
         /// Lista de itens de pedido a serem criados.
         /// </summary>
         public List<PedidoItemCreateItem> Itens { get; set; } = new();
+        public Guid PedidoId { get; set; }
     }
 
     /// <summary>
@@ -26,36 +27,23 @@ namespace MinervaFoods.Application.PedidosItens.PedidoItemCreate
         /// <summary>
         /// Identificador da carne associada ao item.
         /// </summary>
-        public Guid CarneId { get; private set; }
+        public Guid CarneId { get;  set; }
 
         /// <summary>
         /// Quantidade da carne no pedido (em KG).
         /// </summary>
-        public decimal Quantidade { get; private set; }
+        public decimal Quantidade { get;  set; }
 
         /// <summary>
         /// Moeda utilizada para o preço do item.
         /// </summary>
-        public PedidoItemEnum.Moeda Moeda { get; private set; }
+        public PedidoItemEnum.Moeda Moeda { get;  set; }
 
         /// <summary>
         /// Preço unitário da carne na moeda especificada.
         /// </summary>
-        public decimal PrecoUnitario { get; private set; }
+        public decimal PrecoUnitario { get;  set; }
 
-        /// <summary>
-        ///  total do item (quantidade * preço unitário) na moeda do item.
-        /// </summary>
-        public decimal Total { get; private set; }
-
-        /// <summary>
-        ///  total do item (quantidade * preço unitário) na moeda do item.
-        /// </summary>
-        public decimal Cotacao { get; private set; }
-
-        /// <summary>
-        /// Valor total do item Total X Cotacao na moeda do item.
-        /// </summary>
-        public decimal ValorTotalCotacao { get; private set; }
+       
     }
 }

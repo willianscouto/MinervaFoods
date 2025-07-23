@@ -26,20 +26,14 @@ namespace MinervaFoods.Application.Pedidos.PedidoCreate
         /// </summary>
         public Guid CompradorId { get; set; }
 
-        /// <summary>
-        /// Número do pedido.
-        /// </summary>
-        public long NumeroPedido { get; set; }
+   
 
         /// <summary>
         /// Data de criação do pedido.
         /// </summary>
         public DateTime DataPedido { get; set; }
 
-        /// <summary>
-        /// Status atual do pedido (por exemplo: Aberto, Finalizado, Cancelado).
-        /// </summary>
-        public PedidoEnum.Status StatusPedido { get; set; }
+  
 
         /// <summary>
         /// Lista de itens que compõem o pedido.

@@ -8,11 +8,11 @@
     {
         public Guid UserId => Guid.Parse("e4a5dbd9-b2e5-4a67-9ad4-8c9c84a57043");
 
-        public string Username => "leonardo.teste@eclipseworks.com.br";
+        public string Username => "leonardo.teste@minervafoods.com.br";
 
-        public string Role => "Manager";
+        public string Role => "Adm";
 
         public bool IsInRole(string role) =>
-            string.Equals(role, "Manager", StringComparison.OrdinalIgnoreCase);
+            string.Equals(role, "Adm", StringComparison.OrdinalIgnoreCase);
     }
 }

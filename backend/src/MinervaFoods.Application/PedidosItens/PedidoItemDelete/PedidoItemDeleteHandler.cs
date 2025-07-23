@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using FluentValidation;
 using MediatR;
+using MinervaFoods.Application.Pedidos.PedidoDelete;
 using MinervaFoods.Domain.Repositories;
 
 namespace MinervaFoods.Application.PedidosItens.PedidoItemDelete
@@ -46,13 +47,16 @@ namespace MinervaFoods.Application.PedidosItens.PedidoItemDelete
 
             var carnesNaoEncontradas = command.Ids.Where(id => !carnesEncontradas.Contains(id));
             if (carnesNaoEncontradas.Any())
-                throw new KeyNotFoundException($"Carnes com os seguintes IDs não foram encontradas: {string.Join(", ", carnesNaoEncontradas)}");
+                throw new KeyNotFoundException($"Peiddo Item com os seguintes IDs não foram encontradas: {string.Join(", ", carnesNaoEncontradas)}");
 
 
             var success = await _repository.DeleteAsync(itens, cancellationToken);
-          
+           
+            return new PedidoItemDeleteResult
+            {
+                Success = success
+            };
 
-            return _mapper.Map<PedidoItemDeleteResult>(success);
         }
     }
 }

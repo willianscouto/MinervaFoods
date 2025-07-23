@@ -53,7 +53,9 @@ namespace MinervaFoods.Data.Mapping
                 .HasForeignKey(p => p.PedidoId)
                  .OnDelete(DeleteBehavior.Cascade);
 
-                  
+            builder.HasOne(p => p.Comprador)
+.WithOne()
+.HasForeignKey<Pedido>(p => p.CompradorId);
         }
     }
 }

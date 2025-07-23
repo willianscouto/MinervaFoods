@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using FluentValidation;
 using MediatR;
+using MinervaFoods.Application.Carnes.CarneDelete;
 using MinervaFoods.Domain.Repositories;
 
 namespace MinervaFoods.Application.Compradores.CompradorDelete
@@ -57,7 +58,11 @@ namespace MinervaFoods.Application.Compradores.CompradorDelete
 
             var success = await _repository.DeleteAsync(compradorToDelete, cancellationToken);
 
-            return _mapper.Map<CompradorDeleteResult>(success);
+            return new CompradorDeleteResult
+            {
+                Success = success
+            };
+         
         }
     }
 }

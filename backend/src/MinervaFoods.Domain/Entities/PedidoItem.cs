@@ -11,7 +11,7 @@ namespace MinervaFoods.Domain.Entities
         /// <summary>
         /// Identificador do pedido ao qual o item pertence.
         /// </summary>
-        public Guid PedidoId { get; private set; }
+        public Guid PedidoId { get; set; }
 
         /// <summary>
         /// Identificador da carne associada ao item.
@@ -83,6 +83,7 @@ namespace MinervaFoods.Domain.Entities
         /// <param name="cotacao">Cotação.</param>
         public void Atualizar(decimal quantidade, decimal precoUnitario, decimal cotacao)
         {
+
             Quantidade = quantidade;
             PrecoUnitario = precoUnitario;
             Total = quantidade * precoUnitario;
@@ -94,8 +95,11 @@ namespace MinervaFoods.Domain.Entities
         public void AtualizarValorCotacao(decimal cotacao)
         {
             Cotacao = cotacao;
+            Total = Quantidade * PrecoUnitario;
             ValorEmReal();
         }
+
+
 
 
         /// <summary>

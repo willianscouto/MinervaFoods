@@ -32,10 +32,7 @@ namespace MinervaFoods.Application.Pedidos.PedidoCreate
                 .LessThanOrEqualTo(DateTime.Now)
                 .WithMessage("A data do pedido não pode ser no futuro.");
 
-            RuleFor(p => p.StatusPedido)
-                .NotEqual(PedidoEnum.Status.Unknown)
-                .WithMessage("Status do pedido inválido.");
-
+           
             RuleForEach(p => p.PedidoItem)
                 .SetValidator(new PedidoItemCreateValidator());
         }

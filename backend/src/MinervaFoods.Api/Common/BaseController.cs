@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using FluentValidation;
+using Microsoft.AspNetCore.Mvc;
 using MinervaFoods.Helpers;
 using System.Security.Claims;
 
@@ -80,7 +81,15 @@ public class BaseController : ControllerBase
                 Message = ex.Message
             });
         }
-        catch (HttpRequestException ex)
+        catch (MinervaFoods.Helpers.Http.HttpRequestException ex)
+        {
+            return BadRequest(new ApiResponse
+            {
+                Success = false,
+                Message = ex.Message
+            });
+        }
+        catch (ValidationException ex)
         {
             return BadRequest(new ApiResponse
             {
@@ -150,7 +159,15 @@ public class BaseController : ControllerBase
                 Message = ex.Message
             });
         }
-        catch (HttpRequestException ex)
+        catch (MinervaFoods.Helpers.Http.HttpRequestException ex)
+        {
+            return BadRequest(new ApiResponse
+            {
+                Success = false,
+                Message = ex.Message
+            });
+        }
+        catch (ValidationException ex)
         {
             return BadRequest(new ApiResponse
             {
@@ -214,7 +231,15 @@ public class BaseController : ControllerBase
                 Message = ex.Message
             });
         }
-        catch (HttpRequestException ex)
+        catch (MinervaFoods.Helpers.Http.HttpRequestException ex)
+        {
+            return BadRequest(new ApiResponse
+            {
+                Success = false,
+                Message = ex.Message
+            });
+        }
+        catch (ValidationException ex)
         {
             return BadRequest(new ApiResponse
             {
@@ -278,6 +303,14 @@ public class BaseController : ControllerBase
             });
         }
         catch (HttpRequestException ex)
+        {
+            return BadRequest(new ApiResponse
+            {
+                Success = false,
+                Message = ex.Message
+            });
+        }
+        catch (ValidationException ex)
         {
             return BadRequest(new ApiResponse
             {

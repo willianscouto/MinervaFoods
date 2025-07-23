@@ -2,6 +2,6 @@
 {
     public interface ICotacaoMoedaService
     {
-        Task<ICollection<Domain.Entities.Cotacao>> GetAllCotacoes(CancellationToken cancellationToken);
+        Task<Domain.Entities.Cotacao> GetMoedaCotacoes(string Moeda,CancellationToken cancellationToken);
     }
 }

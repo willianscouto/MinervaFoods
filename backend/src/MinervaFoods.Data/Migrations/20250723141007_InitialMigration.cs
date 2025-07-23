@@ -11,6 +11,8 @@ namespace MinervaFoods.Data.Migrations
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.Sql("IF NOT EXISTS(SELECT * FROM sys.databases WHERE name = 'MinervaDB') CREATE DATABASE MinervaDB;");
+
             migrationBuilder.CreateTable(
                 name: "Carnes",
                 columns: table => new
@@ -64,7 +66,7 @@ namespace MinervaFoods.Data.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false, defaultValueSql: "NEWID()"),
-                    CodPais = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    PaisId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Sigla = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Nome = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Status = table.Column<bool>(type: "bit", nullable: false),
@@ -195,6 +197,8 @@ namespace MinervaFoods.Data.Migrations
 
             migrationBuilder.DropTable(
                 name: "Compradores");
+
+            //migrationBuilder.Sql("DROP DATABASE MinervaDB");
         }
     }
 }

@@ -11,7 +11,7 @@ namespace MinervaFoods.Application.PedidosItens.PedidoItemDelete
         /// <summary>
         /// Identificador único do pedido a ser deletado.
         /// </summary>
-        public IEnumerable<Guid> Ids { get; }
+        public IEnumerable<Guid> Ids { get; set; }
 
         /// <summary>
         /// Inicializa uma nova instância de <see cref="PedidoDeleteCommand"/>.

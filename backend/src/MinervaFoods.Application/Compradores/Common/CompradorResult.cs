@@ -5,6 +5,10 @@
     /// </summary>
     public class CompradorResult
     {
+        /// <summary>
+        /// The unique identifier of the project
+        /// </summary>
+        public Guid Id { get; set; }
         /// Nome completo do comprador.
         /// </summary>
         public string Nome { get; set; } = string.Empty;

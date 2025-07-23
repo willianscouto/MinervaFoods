@@ -64,6 +64,15 @@ namespace MinervaFoods.Domain.Entities
         }
 
         /// <summary>
+        /// Adiciona um numero de pedido.
+        /// </summary>
+        /// <param name="numeroPedido">Item a ser adicionado.</param>
+        public void AdicionarNumeroPedido(long numeroPedido)
+        {
+            NumeroPedido = numeroPedido;
+        }
+
+        /// <summary>
         /// Adiciona um item à coleção de itens do pedido e recalcula o valor total.
         /// </summary>
         /// <param name="item">Item a ser adicionado.</param>

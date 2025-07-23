@@ -16,7 +16,9 @@ namespace MinervaFoods.Data
         public DbSet<Domain.Entities.Comprador> Compradores { get; set; }
         public DbSet<Domain.Entities.Pedido> Pedidos { get; set; }
         public DbSet<Domain.Entities.PedidoItem> PedidosItens { get; set; }
-    
+        public DbSet<Domain.Entities.Pais> Paises { get; set; }
+        public DbSet<Domain.Entities.Estado> Estados { get; set; }
+
 
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly IUserAuthenticate _userAuthenticate;
@@ -60,13 +62,13 @@ namespace MinervaFoods.Data
                         entry.Entity.Id = Guid.NewGuid();
                         entry.Entity.Status = true;
                         entry.Entity.IdUserCreated = _userAuthenticate.UserId;
-                        entry.Entity.CreatedAt = DateTime.UtcNow;
+                        entry.Entity.CreatedAt = DateTime.Now;
 
                         break;
 
                     case EntityState.Modified:
                         entry.Entity.IdUserUpdated = _userAuthenticate.UserId;
-                        entry.Entity.UpdatedAt = DateTime.UtcNow;
+                        entry.Entity.UpdatedAt = DateTime.Now;
 
                         break;
                 }

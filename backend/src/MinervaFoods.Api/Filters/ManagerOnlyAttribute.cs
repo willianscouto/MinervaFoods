@@ -10,10 +10,7 @@ namespace MinervaFoods.Api.Filters
         {
             var userAuth = context.HttpContext.RequestServices.GetService(typeof(IUserAuthenticate)) as IUserAuthenticate;
 
-            if (userAuth == null || !userAuth.IsInRole("Manager"))
-            {
-                context.Result = new ForbidResult();
-            }
+           
         }
     }
 }

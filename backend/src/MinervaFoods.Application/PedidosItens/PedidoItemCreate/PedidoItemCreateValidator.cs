@@ -39,9 +39,6 @@ namespace MinervaFoods.Application.PedidosItens.PedidoItemCreate
                 .GreaterThan(0)
                 .WithMessage("O preço unitário deve ser maior que zero.");
 
-            RuleFor(i => i.Cotacao)
-                .GreaterThan(0)
-                .WithMessage("A cotação deve ser maior que zero.");
 
             RuleFor(c => c.Moeda)
                .IsInEnum().WithMessage("Tipo de moeda inválido.")

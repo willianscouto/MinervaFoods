@@ -22,7 +22,7 @@ namespace MinervaFoods.Application.Compradores.CompradorModify
         /// <summary>
         /// Identificador único do comprador a ser atualizado.
         /// </summary>
-        public Guid Id { get; }
+        public Guid Id { get; set; }
 
         /// <summary>
         /// Nome completo do comprador.
@@ -84,14 +84,7 @@ namespace MinervaFoods.Application.Compradores.CompradorModify
         /// </summary>
         public DateTime? DataNascimento { get; set; }
 
-        /// <summary>
-        /// Inicializa uma nova instância do <see cref="CompradorModifyCommand"/>.
-        /// </summary>
-        /// <param name="id">Identificador único do comprador.</param>
-        public CompradorModifyCommand(Guid id)
-        {
-            Id = id;
-        }
+       
 
         /// <summary>
         /// Valida a instância atual do comando e retorna os resultados da validação.

@@ -10,7 +10,7 @@ namespace MinervaFoods.Domain.Validators
     {
         public EstadoValidator()
         {
-            RuleFor(e => e.CodPais)
+            RuleFor(e => e.PaisId)
                 .NotEmpty().WithMessage("O código do país é obrigatório.");
 
             RuleFor(e => e.Sigla)

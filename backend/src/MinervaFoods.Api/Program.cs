@@ -123,12 +123,12 @@ public class Program
             var date = reader.GetDateTime();
 
 
-            if (date.Kind == DateTimeKind.Utc)
+            if (date.Kind == DateTimeKind.Local)
                 return date;
 
 
             var dateWithKind = DateTime.SpecifyKind(date, DateTimeKind.Unspecified);
-            return TimeZoneInfo.ConvertTimeToUtc(dateWithKind, BrasiliaTimeZone);
+            return TimeZoneInfo.ConvertTime(dateWithKind, BrasiliaTimeZone);
         }
 
         public override void Write(Utf8JsonWriter writer, DateTime value, JsonSerializerOptions options)

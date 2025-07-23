@@ -12,7 +12,7 @@ namespace MinervaFoods.Application.Estados.EstadoGet
     /// </summary>
     public class EstadoGetHandler : IRequestHandler<EstadoGetCommand, EstadoResult>
     {
-        private readonly ICarneRepository _repository;
+        private readonly IEstadoRepository _repository;
         private readonly IMapper _mapper;
 
         /// <summary>
@@ -21,7 +21,7 @@ namespace MinervaFoods.Application.Estados.EstadoGet
         /// <param name="repository">Repositório de carnes.</param>
         /// <param name="mapper">Instância do AutoMapper.</param>
         public EstadoGetHandler(
-            ICarneRepository repository,
+            IEstadoRepository repository,
             IMapper mapper)
         {
             _repository = repository;

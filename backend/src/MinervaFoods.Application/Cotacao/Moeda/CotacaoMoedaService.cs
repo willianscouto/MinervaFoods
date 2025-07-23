@@ -10,13 +10,27 @@ namespace MinervaFoods.Application.Cotacao.Moeda
             _httpRequestClient = httpRequestClient;
         }
 
-        public async Task<ICollection<Domain.Entities.Cotacao>> GetAllCotacoes(CancellationToken cancellationToken)
+        //Atencao essa APi tem Limitacao de Cota
+        //Erros na consulta 
+        //{
+        //{"success": false,
+        //{"message": "{\"status\":429,\"code\":\"QuotaExceeded\",\"message\":\"Quota exceeded, see https://docs.awesomeapi.com.br/aviso-sobre-limites\"}\n",
+        //{ "errors": []
+        public async Task<Domain.Entities.Cotacao> GetMoedaCotacoes(string moeda,CancellationToken cancellationToken)
         {
             _httpRequestClient.BaseUrl = "https://economia.awesomeapi.com.br/";
+            //var result = await _httpRequestClient.GetAsync<Dictionary<string, Domain.Entities.Cotacao>>($"json/last/{moeda}");
+            //    return result.Values.First();
+            var cotacaoFake = new Domain.Entities.Cotacao().GerarCotacaoFake(moeda);
 
-            var result = await _httpRequestClient.GetAsync<ICollection<Domain.Entities.Cotacao>>("json/last/:moedas");
-
-            return result;
+           return await Task.FromResult(cotacaoFake);
+     
         }
+
+
+
+
+
+
     }
 }

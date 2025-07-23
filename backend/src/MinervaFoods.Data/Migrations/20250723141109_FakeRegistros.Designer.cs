@@ -12,7 +12,7 @@ using MinervaFoods.Data;
 namespace MinervaFoods.Data.Migrations
 {
     [DbContext(typeof(DefaultContext))]
-    [Migration("20250723071659_FakeRegistros")]
+    [Migration("20250723141109_FakeRegistros")]
     partial class FakeRegistros
     {
         /// <inheritdoc />
@@ -156,9 +156,6 @@ namespace MinervaFoods.Data.Migrations
                         .HasColumnType("uniqueidentifier")
                         .HasDefaultValueSql("NEWID()");
 
-                    b.Property<Guid>("CodPais")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
 
@@ -171,6 +168,9 @@ namespace MinervaFoods.Data.Migrations
                     b.Property<string>("Nome")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid>("PaisId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Sigla")
                         .IsRequired()

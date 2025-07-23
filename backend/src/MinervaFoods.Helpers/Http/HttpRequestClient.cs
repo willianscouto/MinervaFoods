@@ -65,7 +65,7 @@ namespace MinervaFoods.Helpers.Http
                 {
                     var errorContent = await response.Content.ReadAsStringAsync();
 
-                    throw new Exceptions.HttpRequestException(response.StatusCode,$"{errorContent}");
+                    throw new HttpRequestException(response.StatusCode,$"{errorContent}");
                 }
 
                 var responseContent = await response.Content.ReadAsStringAsync();
@@ -83,7 +83,7 @@ namespace MinervaFoods.Helpers.Http
             if (!response.IsSuccessStatusCode)
             {
                 var errorContent = response.Content.ReadAsStringAsync();
-                throw new Exceptions.HttpRequestException($"{(int)response.StatusCode} # {errorContent}");
+                throw new HttpRequestException($"{(int)response.StatusCode} # {errorContent}");
             }
             var responseContent = response.Content.ReadAsStringAsync().Result;
 
@@ -101,7 +101,7 @@ namespace MinervaFoods.Helpers.Http
             {
                 var errorContent = await response.Content.ReadAsStringAsync();
 
-                throw new Exceptions.HttpRequestException($"{(int)response.StatusCode} # {errorContent}");
+                throw new HttpRequestException($"{(int)response.StatusCode} # {errorContent}");
             }
 
             var responseContent = await response.Content.ReadAsStringAsync();

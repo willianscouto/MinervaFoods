@@ -1,20 +1,20 @@
 ﻿using FluentValidation;
 
-namespace MinervaFoods.Application.Estados.CarneGet
+namespace MinervaFoods.Application.Estados.EstadoGetByPais
 {
     /// <summary>
-    /// Validador para <see cref="CarneGetCommand"/>.
+    /// Validador para <see cref="EstadoGetByPaisCommand"/>.
     /// </summary>
-    public class CarneGetValidator : AbstractValidator<CarneGetCommand>
+    public class EstadoGetByPaisValidator : AbstractValidator<EstadoGetByPaisCommand>
     {
         /// <summary>
-        /// Inicializa as regras de validação para <see cref="CarneGetCommand"/>.
+        /// Inicializa as regras de validação para <see cref="EstadoGetByPaisCommand"/>.
         /// </summary>
-        public CarneGetValidator()
+        public EstadoGetByPaisValidator()
         {
-            RuleFor(command => command.Id)
+            RuleFor(command => command.PaisId)
                 .NotEqual(Guid.Empty)
-                .WithMessage("O ID da carne deve ser um GUID válido.");
+                .WithMessage("O ID do país deve ser um GUID válido.");
         }
     }
 }

@@ -42,7 +42,7 @@ namespace MinervaFoods.Application.Pedidos.PedidoGet
             if (!validationResult.IsValid)
                 throw new ValidationException(validationResult.Errors);
 
-            var entity = await _repository.GetByIdAsync(command.Id, cancellationToken,"Comprador", "PedidoItem", "PedidoItem.Carnes");
+            var entity = await _repository.GetByIdAsync(command.Id, cancellationToken, "Comprador", "PedidoItem", "PedidoItem.Carne");
             return _mapper.Map<PedidoResult>(entity);
         }
     }

@@ -1,24 +1,23 @@
 ﻿using MediatR;
-using MinervaFoods.Application.Carnes.Common;
 using MinervaFoods.Application.Estados.Common;
 using MinervaFoods.Helpers;
 
 namespace MinervaFoods.Application.Estados.EstadoGet
 {
     /// <summary>
-    /// Comando para obter uma carne pelo seu identificador.
+    /// Comando para obter um estado pelo seu identificador.
     /// </summary>
     public class EstadoGetCommand : IRequest<EstadoResult>
     {
         /// <summary>
-        /// Obtém o identificador único da carne a ser consultada.
+        /// Obtém o identificador único do estado a ser consultado.
         /// </summary>
         public Guid Id { get; }
 
         /// <summary>
-        /// Inicializa uma nova instância de <see cref="CarneGetCommand"/>.
+        /// Inicializa uma nova instância de <see cref="EstadoGetCommand"/>.
         /// </summary>
-        /// <param name="id">Identificador único da carne.</param>
+        /// <param name="id">Identificador único do estado.</param>
         public EstadoGetCommand(Guid id)
         {
             Id = id;

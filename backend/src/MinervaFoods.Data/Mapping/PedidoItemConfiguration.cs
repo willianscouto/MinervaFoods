@@ -54,6 +54,10 @@ namespace MinervaFoods.Data.Mapping
             builder.Property(p => p.IdUserUpdated);
 
             builder.Property(p => p.UpdatedAt);
+
+            builder.HasOne(p => p.Carne)
+       .WithOne()
+       .HasForeignKey<PedidoItem>(p => p.CarneId);
         }
     }
 }

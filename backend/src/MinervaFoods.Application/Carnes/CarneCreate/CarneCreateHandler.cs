@@ -59,11 +59,11 @@ namespace MinervaFoods.Application.Carnes.CarneCreate
 
             var existingEAN = await _repository.FindAsync(c => c.Ean == command.Ean, cancellationToken);
             if (existingEAN.Any())
-                throw new InvalidOperationException($"Produto com EAN {command.Ean} já existe.");
+                throw new InvalidOperationException($"Carne com EAN {command.Ean} já existe.");
 
             var existingProduct = await _repository.FindAsync(c => c.Nome == command.Nome, cancellationToken);
             if (existingProduct.Any())
-                throw new InvalidOperationException($"Produto com nome {command.Nome} já existe.");
+                throw new InvalidOperationException($"Carne com nome {command.Nome} já existe.");
         }
     }
 }

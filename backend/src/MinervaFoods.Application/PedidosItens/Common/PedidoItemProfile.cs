@@ -13,7 +13,7 @@ namespace MinervaFoods.Application.PedidosItens.Common
         /// </summary>
         public PedidoItemProfile()
         {
-            CreateMap<PedidoItem, PedidoItemResult>();
+            CreateMap<PedidoItem, PedidoItemResult>().ReverseMap();
         }
     }
 }

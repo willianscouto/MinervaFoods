@@ -59,7 +59,7 @@ namespace MinervaFoods.Application.Compradores.CompradorCreate
 
             var existingEAN = await _repository.FindAsync(c => c.Documento == command.Documento, cancellationToken);
             if (existingEAN.Any())
-                throw new InvalidOperationException($"Produto com EAN {command.Documento} já existe.");
+                throw new InvalidOperationException($"Carne com EAN {command.Documento} já existe.");
         }
     }
 }

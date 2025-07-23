@@ -1,16 +1,15 @@
 ﻿using MediatR;
-using MinervaFoods.Application.Carnes.Common;
-using MinervaFoods.Helpers;
+using MinervaFoods.Application.Estados.Common;
 
-namespace MinervaFoods.Application.Estados.CarneGetAll
+namespace MinervaFoods.Application.Estados.EstadoGetAll
 {
     /// <summary>
-    /// Comando para recuperar todas as carnes.
+    /// Comando para recuperar todos os estados.
     /// </summary>
     /// <remarks>
     /// Este comando não possui parâmetros, pois busca todos os registros disponíveis.
     /// </remarks>
-    public class CarneGetAllCommand : IRequest<IEnumerable<CarneResult>>
+    public class EstadoGetAllCommand : IRequest<IEnumerable<EstadoResult>>
     {
     }
 }

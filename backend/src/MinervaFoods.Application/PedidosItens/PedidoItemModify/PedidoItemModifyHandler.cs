@@ -14,6 +14,7 @@ public class PedidoItemModifyHandler : IRequestHandler<PedidoItemModifyCommand, 
     private readonly ICotacaoMoedaService _cotacaoService;
     private readonly IMapper _mapper;
 
+
     public PedidoItemModifyHandler(
         IPedidoItemRepository repository,
         ICotacaoMoedaService cotacaoMoedaService,
@@ -24,25 +25,25 @@ public class PedidoItemModifyHandler : IRequestHandler<PedidoItemModifyCommand, 
         _cotacaoService = cotacaoMoedaService;
         _carneRepository = carneRepository;
         _mapper = mapper;
+        
     }
 
     public async Task<ICollection<PedidoItemResult>> Handle(PedidoItemModifyCommand command, CancellationToken cancellationToken)
     {
-        
 
-       var pedidosItens = await ValidateAsync(command, cancellationToken);
-
-        var allCotacao = await _cotacaoService.GetAllCotacoes(cancellationToken);
+        var pedidosItens = await ValidateAsync(command, cancellationToken);
 
         foreach (var item in pedidosItens)
         {
-            var cotacao = allCotacao.FirstOrDefault(x => x.Code.Trim().ToUpper() == item.Moeda.ToString().ToUpper());
-            if (cotacao == null)
+            var cotacaoMoeda = await _cotacaoService.GetMoedaCotacoes(item.Moeda.ToString(), cancellationToken);
+            var itensCommand = command.Itens.Where(x => x.Id == item.Id).FirstOrDefault();
+            if (cotacaoMoeda == null)
                 throw new KeyNotFoundException($"Cotação para moeda {item.Moeda} não encontrada.");
 
-            item.AtualizarValorCotacao(cotacao.Bid);
+            item.Atualizar(itensCommand!.Quantidade,itensCommand.PrecoUnitario, cotacaoMoeda.Bid);
         }
 
+        pedidosItens = await _repository.UpdateAsync(pedidosItens, cancellationToken);
         return _mapper.Map<ICollection<PedidoItemResult>>(pedidosItens);
     }
 
@@ -60,16 +61,16 @@ public class PedidoItemModifyHandler : IRequestHandler<PedidoItemModifyCommand, 
         var carnes = await _carneRepository.GetByIdAsync(command.Itens.Select(x => x.CarneId), cancellationToken);
         var carneIds = carnes.Select(c => c.Id).ToHashSet();
 
-        var invalidCarneItems = command.Itens.Where(i => !carneIds.Contains(i.CarneId));
-        if (invalidCarneItems.Any())
+        var invalidCarneItems = command.Itens.Where(i => carneIds.Contains(i.CarneId));
+        if (!invalidCarneItems.Any())
             throw new KeyNotFoundException("One or more products specified in the sale items were not found.");
 
 
-        var pedidosItens = await _repository.GetByIdAsync(command.Itens.Select(c=> c.Id), cancellationToken);
-        var pedidosItensIds = carnes.Select(c => c.Id).ToHashSet();
+        var pedidosItens = await _repository.GetByIdAsync(command.Itens.Select(c => c.Id), cancellationToken);
+        var pedidosItensIds = pedidosItens.Select(c => c.Id).ToHashSet();
 
-        var invalidItems = command.Itens.Where(i => !pedidosItensIds.Contains(i.Id));
-        if (invalidItems.Any())
+        var invalidItems = command.Itens.Where(i => pedidosItensIds.Contains(i.Id));
+        if (!invalidItems.Any())
             throw new KeyNotFoundException("One or more products specified in the sale items were not found.");
 
         return pedidosItens;

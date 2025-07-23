@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using FluentValidation;
 using MediatR;
+using MinervaFoods.Application.PedidosItens.PedidoItemDelete;
 using MinervaFoods.Domain.Repositories;
 
 namespace MinervaFoods.Application.Pedidos.PedidoDelete
@@ -11,6 +12,7 @@ namespace MinervaFoods.Application.Pedidos.PedidoDelete
     public class PedidoDeleteHandler : IRequestHandler<PedidoDeleteCommand, PedidoDeleteResult>
     {
         private readonly IPedidoRepository _repository;
+        private readonly IMediator _mediator;
         private readonly IMapper _mapper;
 
         /// <summary>
@@ -18,10 +20,13 @@ namespace MinervaFoods.Application.Pedidos.PedidoDelete
         /// </summary>
         /// <param name="repository">Repositório de pedidos.</param>
         /// <param name="mapper">Instância do AutoMapper.</param>
-        public PedidoDeleteHandler(IPedidoRepository repository, IMapper mapper)
+        public PedidoDeleteHandler(IPedidoRepository repository, 
+        IMediator mediator,
+        IMapper mapper)
         {
             _repository = repository;
             _mapper = mapper;
+            _mediator = mediator;
         }
 
         /// <summary>
@@ -40,13 +45,20 @@ namespace MinervaFoods.Application.Pedidos.PedidoDelete
             if (!validationResult.IsValid)
                 throw new ValidationException(validationResult.Errors);
 
-            var pedidoToDelete = await _repository.GetByIdAsync(command.Id, cancellationToken);
+            var pedidoToDelete = await _repository.GetByIdAsync(command.Id, cancellationToken, "PedidoItem");
             if (pedidoToDelete == null)
                 throw new KeyNotFoundException($"Pedido com ID {command.Id} não encontrado.");
 
+            var deleteCommandItem = new PedidoItemDeleteCommand(pedidoToDelete.PedidoItem.Select(x => x.Id));
+            await _mediator.Send(deleteCommandItem, cancellationToken);
+
             var success = await _repository.DeleteAsync(pedidoToDelete, cancellationToken);
 
-            return _mapper.Map<PedidoDeleteResult>(success);
+            return new PedidoDeleteResult
+            {
+                Success = success
+            };
+            
         }
     }
 }

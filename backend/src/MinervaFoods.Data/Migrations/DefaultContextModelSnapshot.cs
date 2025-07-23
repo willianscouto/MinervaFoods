@@ -153,9 +153,6 @@ namespace MinervaFoods.Data.Migrations
                         .HasColumnType("uniqueidentifier")
                         .HasDefaultValueSql("NEWID()");
 
-                    b.Property<Guid>("CodPais")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
 
@@ -168,6 +165,9 @@ namespace MinervaFoods.Data.Migrations
                     b.Property<string>("Nome")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid>("PaisId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Sigla")
                         .IsRequired()

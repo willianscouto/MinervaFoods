@@ -1,6 +1,6 @@
 ﻿using System.Net;
 
-namespace MinervaFoods.Helpers.Exceptions
+namespace MinervaFoods.Helpers.Http
 {
     public class HttpRequestException : System.Exception
     {

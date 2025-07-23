@@ -16,7 +16,7 @@ namespace MinervaFoods.Data.Mapping
                    .HasColumnType("uniqueidentifier")
                    .HasDefaultValueSql("NEWID()");
 
-            builder.Property(u => u.CodPais)
+            builder.Property(u => u.PaisId)
             .IsRequired();
 
             builder.Property(u => u.Sigla)

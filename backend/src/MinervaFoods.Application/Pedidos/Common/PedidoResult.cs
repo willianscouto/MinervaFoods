@@ -1,5 +1,5 @@
-﻿using MinervaFoods.Application.PedidosItens.Common;
-using MinervaFoods.Domain.Entities;
+﻿using MinervaFoods.Application.Compradores.Common;
+using MinervaFoods.Application.PedidosItens.Common;
 using MinervaFoods.Domain.Enums;
 
 namespace MinervaFoods.Application.Pedidos.Common
@@ -10,6 +10,11 @@ namespace MinervaFoods.Application.Pedidos.Common
     public class PedidoResult
     {
         /// <summary>
+        /// Identificador único da carne.
+        /// </summary>
+        public Guid Id { get; set; }
+
+        /// <summary>
         /// Identificador do comprador que realizou o pedido.
         /// </summary>
         public Guid CompradorId { get; set; }
@@ -17,7 +22,7 @@ namespace MinervaFoods.Application.Pedidos.Common
         /// <summary>
         /// Identificador do comprador que realizou o pedido.
         /// </summary>
-        public Comprador Comprador { get; set; } = null!;
+        public CompradorResult Comprador { get; set; } = null!;
 
         /// <summary>
         /// Identificador do do numero do pedido.
