@@ -1,0 +1,37 @@
+services:
+  minervafood.data:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    container_name: minervafood_developer_sql
+    environment:
+      SA_PASSWORD: "Teste#MinervaFoods"
+      ACCEPT_EULA: "Y"
+    ports:
+      - "1433:1433"
+    volumes:
+      - sqlserver_data:/var/opt/mssql
+    networks:
+      - minervafood_network
+
+  minervafoods.api:
+    image: ${DOCKER_REGISTRY-}minervafoodsapi
+    container_name: minervafood_developer_api
+    build:
+      context: .
+      dockerfile: src/MinervaFoods.Api/Dockerfile
+    depends_on:
+      - minervafood.data
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_HTTP_PORTS=8080
+      - ASPNETCORE_HTTPS_PORTS=8081
+    ports:
+      - "8080:8080"
+      - "8081:8081"
+    networks:
+      - minervafood_network
+
+volumes:
+  sqlserver_data:
+
+networks:
+  minervafood_network:

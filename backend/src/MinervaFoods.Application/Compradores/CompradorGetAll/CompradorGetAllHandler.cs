@@ -1,0 +1,42 @@
+﻿using AutoMapper;
+using MediatR;
+using MinervaFoods.Application.Compradores.Common;
+using MinervaFoods.Domain.Repositories;
+
+namespace MinervaFoods.Application.Compradores.CompradorGetAll
+{
+    /// <summary>
+    /// Handler para o comando <see cref="CompradorGetAllCommand"/>.
+    /// Responsável por recuperar todos os compradores cadastrados.
+    /// </summary>
+    public class CompradorGetAllHandler : IRequestHandler<CompradorGetAllCommand, IEnumerable<CompradorResult>>
+    {
+        private readonly ICompradorRepository _repository;
+        private readonly IMapper _mapper;
+
+        /// <summary>
+        /// Inicializa uma nova instância do handler de recuperação de todos os compradores.
+        /// </summary>
+        /// <param name="repository">Repositório para acesso aos dados de compradores.</param>
+        /// <param name="mapper">Instância do AutoMapper para mapeamento de objetos.</param>
+        public CompradorGetAllHandler(
+            ICompradorRepository repository,
+            IMapper mapper)
+        {
+            _repository = repository;
+            _mapper = mapper;
+        }
+
+        /// <summary>
+        /// Executa a lógica para recuperar todos os compradores.
+        /// </summary>
+        /// <param name="command">Comando para recuperar todos os compradores (sem parâmetros).</param>
+        /// <param name="cancellationToken">Token para cancelamento da operação assíncrona.</param>
+        /// <returns>Retorna uma lista de <see cref="CompradorResult"/> contendo todos os compradores.</returns>
+        public async Task<IEnumerable<CompradorResult>> Handle(CompradorGetAllCommand command, CancellationToken cancellationToken)
+        {
+            var entities = await _repository.GetAllAsync(cancellationToken);
+            return _mapper.Map<IEnumerable<CompradorResult>>(entities);
+        }
+    }
+}
