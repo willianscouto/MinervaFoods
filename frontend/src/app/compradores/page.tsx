@@ -25,10 +25,9 @@ import {
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { useRouter } from "next/navigation";
-import { Carne } from "@/interfaces/Carne";
-import { carneService } from "@/services/carneService";
+import { Comprador } from "@/interfaces/Comprador";
+import { compradorService } from "@/services/compradorService";
 import { useToast } from "@/contexts/ToastContext";
-import { TipoCarneEnum } from "@/interfaces/enums/TipoCarneEnum";
 
 const headerCellStyle = {
   backgroundColor: "#E3000F",
@@ -36,32 +35,32 @@ const headerCellStyle = {
   fontWeight: "bold",
 };
 
-export default function Carnes() {
+export default function Compradores() {
   const { openToast } = useToast();
-  const [carnes, setCarnes] = useState<Carne[]>([]);
+  const [compradores, setCompradores] = useState<Comprador[]>([]);
   const [loading, setLoading] = useState(true);
   const [deleteId, setDeleteId] = useState<string | null>(null);
   const [openDialog, setOpenDialog] = useState(false);
   const router = useRouter();
 
   useEffect(() => {
-    fetchCarnes();
+    fetchCompradores();
   }, []);
 
-  async function fetchCarnes() {
+  async function fetchCompradores() {
     setLoading(true);
     try {
-      const data = await carneService.getAll();
-      setCarnes(data);
+      const data = await compradorService.getAll();
+      setCompradores(data);
     } catch (error) {
-      openToast({ message: "Erro ao carregar carne." + error, severity: "error" });
+      openToast({ message: "Erro ao carregar compradores: " + error, severity: "error" });
     } finally {
       setLoading(false);
     }
   }
 
   function handleEdit(id: string) {
-    router.push(`/carnes/editar/${id}`);
+    router.push(`/compradores/editar/${id}`);
   }
 
   function handleDeleteClick(id: string) {
@@ -72,20 +71,19 @@ export default function Carnes() {
   async function handleDeleteConfirm() {
     if (!deleteId) return;
     try {
-      await carneService.delete(deleteId);
-
+      await compradorService.delete(deleteId);
       setOpenDialog(false);
       setDeleteId(null);
-      fetchCarnes();
-       openToast({
-        message: "Carne deletada com sucesso!",
+      fetchCompradores();
+      openToast({
+        message: "Comprador deletado com sucesso!",
         severity: "success",
       });
     } catch (error) {
       openToast({
-          message: "Erro ao deletar carne: " + error,
-          severity: "error",
-        });
+        message: "Erro ao deletar comprador: " + error,
+        severity: "error",
+      });
       setOpenDialog(false);
     }
   }
@@ -93,13 +91,13 @@ export default function Carnes() {
   return (
     <Box p={2}>
       <Stack direction="row" justifyContent="space-between" alignItems="center" mb={1}>
-        <Typography variant="h4">Carnes</Typography>
+        <Typography variant="h4">Compradores</Typography>
         <Button
           variant="contained"
           color="primary"
           size="large"
           sx={{ minWidth: 140 }}
-          onClick={() => router.push("/carnes/cadastro")}
+          onClick={() => router.push("/compradores/cadastro")}
         >
           Novo
         </Button>
@@ -118,39 +116,30 @@ export default function Carnes() {
               <TableRow>
                 <TableCell sx={headerCellStyle}>Ações</TableCell>
                 <TableCell sx={headerCellStyle}>Nome</TableCell>
-                <TableCell sx={headerCellStyle}>EAN</TableCell>
-                <TableCell sx={headerCellStyle}>Tipo</TableCell>
-                <TableCell sx={headerCellStyle}>Unidade Medida</TableCell>
+                <TableCell sx={headerCellStyle}>Documento</TableCell>
+                <TableCell sx={headerCellStyle}>Email</TableCell>
+                <TableCell sx={headerCellStyle}>Data Nascimento</TableCell>
+                <TableCell sx={headerCellStyle}>País</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
-              {carnes.map((carne) => (
-                <TableRow key={carne.id}>
+              {compradores.map((c) => (
+                <TableRow key={c.id}>
                   <TableCell>
                     <Stack direction="row" spacing={1}>
-                      <IconButton
-                        size="small"
-                        color="primary"
-                        aria-label="editar"
-                        onClick={() => handleEdit(carne.id)}
-                      >
+                      <IconButton size="small" color="primary" aria-label="editar" onClick={() => handleEdit(c.id)}>
                         <EditIcon />
                       </IconButton>
-
-                      <IconButton
-                        size="small"
-                        color="error"
-                        aria-label="excluir"
-                        onClick={() => handleDeleteClick(carne.id)}
-                      >
+                      <IconButton size="small" color="error" aria-label="excluir" onClick={() => handleDeleteClick(c.id)}>
                         <DeleteIcon />
                       </IconButton>
                     </Stack>
                   </TableCell>
-                  <TableCell>{carne.nome}</TableCell>
-                  <TableCell>{carne.ean}</TableCell>
-                  <TableCell>{TipoCarneEnum[carne.tipoCarne]}</TableCell>
-                  <TableCell>{carne.unidadeMedida || "KG"}</TableCell>
+                  <TableCell>{c.nome}</TableCell>
+                  <TableCell>{c.documento}</TableCell>
+                  <TableCell>{c.email}</TableCell>
+                  <TableCell>{c.dataNascimento ? new Date(c.dataNascimento).toLocaleDateString("pt-BR") : "-"}</TableCell>
+                  <TableCell>{c.pais || "-"}</TableCell>
                 </TableRow>
               ))}
             </TableBody>
@@ -162,9 +151,7 @@ export default function Carnes() {
       <Dialog open={openDialog} onClose={() => setOpenDialog(false)}>
         <DialogTitle>Confirmar Exclusão</DialogTitle>
         <DialogContent>
-          <DialogContentText>
-            Tem certeza que deseja excluir esta carne? Esta ação não pode ser desfeita.
-          </DialogContentText>
+          <DialogContentText>Tem certeza que deseja excluir este comprador? Esta ação não pode ser desfeita.</DialogContentText>
         </DialogContent>
         <DialogActions>
           <Button onClick={() => setOpenDialog(false)}>Cancelar</Button>

@@ -63,7 +63,7 @@ namespace MinervaFoods.Api.Features.Compradores.CompradorModify
                 .When(c => !string.IsNullOrWhiteSpace(c.Cidade));
 
             RuleFor(c => c.Estado)
-                .MaximumLength(2).WithMessage("O estado deve ter no máximo 2 caracteres.")
+                .MaximumLength(5).WithMessage("O estado deve ter no máximo 5 caracteres.")
                 .When(c => !string.IsNullOrWhiteSpace(c.Estado));
 
             RuleFor(c => c.Cep)

@@ -18,6 +18,7 @@ interface Props<T extends FieldValues> {
   control: Control<T>;
   required?: boolean;
   options: Option[];
+  disabled?: boolean;
 }
 
 export default function SelectInput<T extends FieldValues>({
@@ -26,6 +27,7 @@ export default function SelectInput<T extends FieldValues>({
   control,
   required = false,
   options,
+  disabled= false
 }: Props<T>) {
   return (
     <Controller
@@ -43,7 +45,8 @@ export default function SelectInput<T extends FieldValues>({
             <Select
               {...field}
               label={label}
-              value={field.value ?? ""} // Garante que value nunca seja undefined
+              value={field.value ?? ""} 
+              disabled ={disabled}
             >
               {options.map((option) => (
                 <MenuItem key={option.value} value={option.value}>
