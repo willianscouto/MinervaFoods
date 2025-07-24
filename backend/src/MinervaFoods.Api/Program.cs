@@ -1,19 +1,20 @@
 using MediatR;
+using Microsoft.AspNetCore.Cors.Infrastructure;
 using Microsoft.AspNetCore.Localization;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Any;
+using MinervaFoods.Api.Configurations;
 using MinervaFoods.Application;
 using MinervaFoods.Data;
 using MinervaFoods.Helpers;
+using MinervaFoods.Helpers.HealthChecks;
+using MinervaFoods.Helpers.Logging;
 using MinervaFoods.IoC;
 using Serilog;
 using System.Globalization;
 using System.Runtime.InteropServices;
 using System.Text.Json;
 using System.Text.Json.Serialization;
-using MinervaFoods.Helpers.HealthChecks;
-using MinervaFoods.Helpers.Logging;
-using MinervaFoods.Api.Configurations;
 
 public class Program
 {
@@ -48,6 +49,16 @@ public class Program
 
             builder.AddBasicHealthChecks();
 
+            builder.Services.AddMvc();
+           
+            builder.Services.AddCors(options =>
+            {
+                options.AddPolicy("Total", new CorsPolicyBuilder()
+                    .AllowAnyOrigin()
+                    .AllowAnyMethod()
+                    .AllowAnyHeader()
+                    .Build());
+            });
 
 
             builder.Services.AddSwaggerGen(options =>

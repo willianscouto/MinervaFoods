@@ -12,7 +12,6 @@ namespace MinervaFoods.Data.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.Sql("IF NOT EXISTS(SELECT * FROM sys.databases WHERE name = 'MinervaDB') CREATE DATABASE MinervaDB;");
-
             migrationBuilder.CreateTable(
                 name: "Carnes",
                 columns: table => new
@@ -164,12 +163,14 @@ namespace MinervaFoods.Data.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_Pedidos_CompradorId",
                 table: "Pedidos",
-                column: "CompradorId");
+                column: "CompradorId",
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_PedidosItens_CarneId",
                 table: "PedidosItens",
-                column: "CarneId");
+                column: "CarneId",
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_PedidosItens_PedidoId",
@@ -197,8 +198,6 @@ namespace MinervaFoods.Data.Migrations
 
             migrationBuilder.DropTable(
                 name: "Compradores");
-
-            //migrationBuilder.Sql("DROP DATABASE MinervaDB");
         }
     }
 }

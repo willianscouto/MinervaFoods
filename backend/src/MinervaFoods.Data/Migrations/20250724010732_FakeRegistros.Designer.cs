@@ -12,8 +12,8 @@ using MinervaFoods.Data;
 namespace MinervaFoods.Data.Migrations
 {
     [DbContext(typeof(DefaultContext))]
-    [Migration("20250723141007_InitialMigration")]
-    partial class InitialMigration
+    [Migration("20250724010732_FakeRegistros")]
+    partial class FakeRegistros
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -263,7 +263,8 @@ namespace MinervaFoods.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CompradorId");
+                    b.HasIndex("CompradorId")
+                        .IsUnique();
 
                     b.ToTable("Pedidos", (string)null);
                 });
@@ -320,7 +321,8 @@ namespace MinervaFoods.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CarneId");
+                    b.HasIndex("CarneId")
+                        .IsUnique();
 
                     b.HasIndex("PedidoId");
 
@@ -330,8 +332,8 @@ namespace MinervaFoods.Data.Migrations
             modelBuilder.Entity("MinervaFoods.Domain.Entities.Pedido", b =>
                 {
                     b.HasOne("MinervaFoods.Domain.Entities.Comprador", "Comprador")
-                        .WithMany()
-                        .HasForeignKey("CompradorId")
+                        .WithOne()
+                        .HasForeignKey("MinervaFoods.Domain.Entities.Pedido", "CompradorId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -341,8 +343,8 @@ namespace MinervaFoods.Data.Migrations
             modelBuilder.Entity("MinervaFoods.Domain.Entities.PedidoItem", b =>
                 {
                     b.HasOne("MinervaFoods.Domain.Entities.Carne", "Carne")
-                        .WithMany()
-                        .HasForeignKey("CarneId")
+                        .WithOne()
+                        .HasForeignKey("MinervaFoods.Domain.Entities.PedidoItem", "CarneId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 

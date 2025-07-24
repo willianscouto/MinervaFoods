@@ -11,6 +11,7 @@ services:
       - sqlserver_data:/var/opt/mssql
     networks:
       - minervafood_network
+
   minervafoods.api:
     image: ${DOCKER_REGISTRY-}minervafoodsapi
     container_name: minervafood_developer_api
@@ -23,6 +24,7 @@ services:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_HTTP_PORTS=8080
       - ASPNETCORE_HTTPS_PORTS=8081
+      - ConnectionStrings__DefaultConnection=Server=minervafood.data,1433;Database=MinervaDB;User Id=sa;Password=Teste#MinervaFoods;TrustServerCertificate=True;
     ports:
       - "8080:8080"
       - "8081:8081"
