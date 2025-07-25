@@ -145,7 +145,7 @@ public class Program
         public override void Write(Utf8JsonWriter writer, DateTime value, JsonSerializerOptions options)
         {
 
-            var brasiliaTime = TimeZoneInfo.ConvertTimeFromUtc(value.ToUniversalTime(), BrasiliaTimeZone);
+            var brasiliaTime = TimeZoneInfo.ConvertTimeFromUtc(value, BrasiliaTimeZone);
             writer.WriteStringValue(brasiliaTime.ToString("yyyy-MM-ddTHH:mm:ss"));
         }
     }

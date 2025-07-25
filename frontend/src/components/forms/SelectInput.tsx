@@ -1,66 +1,51 @@
-import { Controller, Control, FieldValues, Path } from "react-hook-form";
-import {
-  Select,
-  MenuItem,
-  FormControl,
-  InputLabel,
-  FormHelperText,
-} from "@mui/material";
+'use client';
+
+import { Select, MenuItem, FormControl, InputLabel, FormHelperText } from "@mui/material";
 
 interface Option {
   value: string | number;
   label: string;
 }
 
-interface Props<T extends FieldValues> {
-  name: Path<T>;
+interface Props {
+  name?: string;
   label: string;
-  control: Control<T>;
+  value: any;
+  onChange: (e: any) => void;
   required?: boolean;
   options: Option[];
   disabled?: boolean;
+  error?: boolean;
+  helperText?: string;
 }
 
-export default function SelectInput<T extends FieldValues>({
+export default function SelectInput({
   name,
   label,
-  control,
+  value,
+  onChange,
   required = false,
   options,
-  disabled= false
-}: Props<T>) {
+  disabled = false,
+  error = false,
+  helperText
+}: Props) {
   return (
-    <Controller
-      name={name}
-      control={control}
-      render={({ field, fieldState }) => (
-        <>
-          <FormControl
-            fullWidth
-            required={required}
-            error={!!fieldState.error}
-            margin="normal"
-          >
-            <InputLabel>{label}</InputLabel>
-            <Select
-              {...field}
-              label={label}
-              value={field.value ?? ""} 
-              disabled ={disabled}
-            >
-              {options.map((option) => (
-                <MenuItem key={option.value} value={option.value}>
-                  {option.label}
-                </MenuItem>
-              ))}
-            </Select>
-            <FormHelperText>{fieldState.error?.message}</FormHelperText>
-          </FormControl>
-          {fieldState.invalid && (
-            <span className="error-message">{fieldState.error?.message}</span>
-          )}
-        </>
-      )}
-    />
+    <FormControl fullWidth required={required} error={error} margin="normal" disabled={disabled}>
+      <InputLabel>{label}</InputLabel>
+      <Select
+        name={name}
+        label={label}
+        value={value}
+        onChange={onChange}
+      >
+        {options.map((option) => (
+          <MenuItem key={option.value} value={option.value}>
+            {option.label}
+          </MenuItem>
+        ))}
+      </Select>
+      {helperText && <FormHelperText>{helperText}</FormHelperText>}
+    </FormControl>
   );
 }

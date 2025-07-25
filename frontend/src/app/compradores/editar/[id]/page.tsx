@@ -10,7 +10,7 @@ import {
   TextField,
   CircularProgress,
 } from "@mui/material";
-import { useRouter } from "next/navigation";
+import { useRouter, useParams } from "next/navigation";
 import { useToast } from "@/contexts/ToastContext";
 import { compradorService } from "@/services/compradorService";
 import { cepService } from "@/services/cepService";
@@ -20,17 +20,23 @@ import { Comprador } from "@/interfaces/Comprador";
 import { Pais } from "@/interfaces/Pais";
 import { Estado } from "@/interfaces/Estado";
 import SelectInput from "@/components/forms/ControllerSelectInput";
+import {formatarDataHoraInput} from "@/utils/converter";
 
 type FormData = Omit<Comprador, "id">;
 
-export default function CadastroComprador() {
+export default function EditarComprador() {
   const { openToast } = useToast();
   const router = useRouter();
+  const params = useParams();
+  const compradorId = params?.id as string;
 
+  const [loading, setLoading] = useState(true);
   const [loadingCep, setLoadingCep] = useState(false);
   const [cepValido, setCepValido] = useState(false);
   const [paises, setPaises] = useState<Pais[]>([]);
   const [estados, setEstados] = useState<Estado[]>([]);
+
+
 
   const {
     handleSubmit,
@@ -38,29 +44,30 @@ export default function CadastroComprador() {
     watch,
     setValue,
     getValues,
+    reset,
     formState: { errors },
-  } = useForm<FormData>({
-    defaultValues: {
-      nome: "",
-      documento: "",
-      email: "",
-      telefone: "",
-      dataNascimento: "",
-      cep: "",
-      logradouro: "",
-      numero: "",
-      complemento: "",
-      bairro: "",
-      cidade: "",
-      estado: "",
-      pais: "",
-    },
-  });
+  } = useForm<FormData>();
 
   const cep = watch("cep");
   const paisSelecionado = watch("pais");
 
-  // Carrega países no início
+
+  // Carregar comprador existente
+  useEffect(() => {
+    if (!compradorId) return;
+    compradorService
+      .getById(compradorId)
+      .then((data) => {
+        const [logradouro, numero] = data.logradouro?.split(", ") ?? ["", ""];
+        reset({ ...data, logradouro, numero });
+      })
+      .catch(() =>
+        openToast({ message: "Erro ao carregar comprador", severity: "error" })
+      )
+      .finally(() => setLoading(false));
+  }, [compradorId]);
+
+  // Carrega países
   useEffect(() => {
     paisService
       .getAll()
@@ -70,7 +77,7 @@ export default function CadastroComprador() {
       );
   }, []);
 
-  // Quando o país mudar, busca os estados correspondentes
+  // Estados por país
   useEffect(() => {
     estadoService
       .getAll()
@@ -80,102 +87,89 @@ export default function CadastroComprador() {
           const filtrados = todos.filter((e) => e.paisId === paisSelect?.id);
           setEstados(filtrados);
         } else {
-          setEstados(todos); // Nenhum país selecionado: mostra todos os estados
+          setEstados(todos);
         }
       })
       .catch(() =>
         openToast({ message: "Erro ao carregar estados", severity: "error" })
       );
-  }, [paisSelecionado]);
+  }, [paisSelecionado, paises]);
 
+  // CEP auto preenchimento
   const handleConsultarCep = async () => {
-  const cepLimpo = cep?.replace(/\D/g, "");
-  if (!cepLimpo || cepLimpo.length !== 8) {
-
-    return;
-  }
-
-  setLoadingCep(true);
-
-  try {
-    const response = await cepService.getCep(cepLimpo);
-    if (response.data.erro) {
-      openToast({
-        message: "CEP não encontrado. Preencha os campos manualmente.",
-        severity: "warning",
-      });
-    } else {
-      const { logradouro, bairro, localidade, uf } = response.data;
-      setValue("logradouro", logradouro || "");
-      setValue("bairro", bairro || "");
-      setValue("cidade", localidade || "");
-      setValue("pais", "BR");
-      setValue("estado", uf || "");
+    const cepLimpo = cep?.replace(/\D/g, "");
+    if (!cepLimpo || cepLimpo.length !== 8) return;
+    setLoadingCep(true);
+    try {
+      const response = await cepService.getCep(cepLimpo);
+      if (response.data.erro) {
+        setCepValido(false);
+        openToast({
+          message: "CEP não encontrado. Preencha manualmente.",
+          severity: "warning",
+        });
+      } else {
+        const { logradouro, bairro, localidade, uf } = response.data;
+        setValue("logradouro", logradouro || "");
+        setValue("bairro", bairro || "");
+        setValue("cidade", localidade || "");
+        setValue("pais", "BR");
+        setValue("estado", uf || "");
+        setCepValido(true);
+      }
+    } catch (error) {
+      setCepValido(false);
+      openToast({ message: "Erro ao consultar CEP", severity: "error" });
+    } finally {
+      setLoadingCep(false);
     }
-  } catch (error) {
-    openToast({
-      message: "Erro ao consultar CEP: " + error,
-      severity: "error",
-    });
-  } finally {
-    setLoadingCep(false);
-  }
-};
+  };
 
-
-  // Quando CEP preencher sigla do estado (UF), setar estadoId correspondente
+  // Ajusta estadoId pelo UF
   useEffect(() => {
     const uf = getValues("estado");
     if (!uf || estados.length === 0) return;
-
-    const estadoEncontrado = estados.find((e) => e.sigla === uf);
+    let estadoEncontrado = estados.find((e) => e.sigla === uf);
     if (estadoEncontrado) {
       setValue("estado", estadoEncontrado.sigla);
     }
-  }, [estados, getValues, setValue]);
+    else {
+
+     estadoEncontrado = estados.find((e) => e.id === uf);
+    setValue("estado", estadoEncontrado?.sigla);
+    }
+  }, [estados]);
+
   const onSubmit = async (data: FormData) => {
     try {
       const enderecoCompleto = `${data.logradouro}, ${data.numero}`;
       const payload = {
         ...data,
         logradouro: enderecoCompleto,
+        id: compradorId
       };
 
-      await compradorService.create(payload);
-
+      await compradorService.update(payload);
       openToast({
-        message: "Comprador cadastrado com sucesso!",
+        message: "Comprador atualizado com sucesso!",
         severity: "success",
       });
       router.push("/compradores");
     } catch (error) {
       openToast({
-        message: "Erro ao cadastrar comprador: " + error,
+        message: "Erro ao atualizar comprador: " + error,
         severity: "error",
       });
     }
   };
 
+  if (loading) return <CircularProgress />;
+
   return (
     <Box component="form" onSubmit={handleSubmit(onSubmit)} noValidate>
-       <Stack
-        direction="row"
-        justifyContent="space-between"
-        alignItems="center"
-        mb={2}
-      >
-        <Typography variant="h4" gutterBottom>
-        Cadastro de Comprador
-        </Typography>
-        <Button    
-        variant="outlined"
-          color="secondary"
-          size="large"
-          sx={{ minWidth: 140 }} onClick={() => router.back()}>
-          Voltar
-        </Button>
-      </Stack>
-   
+      <Typography variant="h4" gutterBottom>
+        Editar Comprador
+      </Typography>
 
       <Stack spacing={2}>
         {/* Nome */}
@@ -281,6 +275,7 @@ export default function CadastroComprador() {
               InputLabelProps={{ shrink: true }}
               error={!!errors.dataNascimento}
               helperText={errors.dataNascimento?.message}
+                value={formatarDataHoraInput(field.value)}
               fullWidth
               required
             />
@@ -440,14 +435,14 @@ export default function CadastroComprador() {
       </Stack>
 
       <Stack direction="row" spacing={2} sx={{ mt: 3 }}>
-     
         <Button
-          type="submit"
-          variant="contained"
-          color="primary"
-          size="large"
-          sx={{ minWidth: 140 }}
+          variant="outlined"
+          color="secondary"
+          onClick={() => router.back()}
         >
+          Voltar
+        </Button>
+        <Button type="submit" variant="contained" color="primary">
           Salvar
         </Button>
       </Stack>

@@ -16,7 +16,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   });
 
   try {
-     console.log("ddata",data)
+
     const response = await axios.request({
       url: `${API_URL}/${path}`,
       method,
@@ -29,7 +29,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     res.status(200).json(response.data);
   } catch (error: unknown) {
     if (axios.isAxiosError(error)) {
-console.log(error);
+
       res.status(error.response?.status || 500).json({
         message: "Erro ao fazer proxy da requisição",
         error: error.response?.data || error.message,

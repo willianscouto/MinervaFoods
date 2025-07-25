@@ -21,6 +21,7 @@ namespace MinervaFoods.Data.Mapping
                    .HasMaxLength(120);
 
             builder.Property(u => u.UnidadeMedida)
+                   .HasMaxLength(5)
                    .IsRequired();
 
             builder.Property(u => u.TipoCarne)

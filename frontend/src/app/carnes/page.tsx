@@ -116,7 +116,7 @@ export default function Carnes() {
           <Table>
             <TableHead>
               <TableRow>
-                <TableCell sx={headerCellStyle}>Ações</TableCell>
+                <TableCell sx={headerCellStyle}></TableCell>
                 <TableCell sx={headerCellStyle}>Nome</TableCell>
                 <TableCell sx={headerCellStyle}>EAN</TableCell>
                 <TableCell sx={headerCellStyle}>Tipo</TableCell>

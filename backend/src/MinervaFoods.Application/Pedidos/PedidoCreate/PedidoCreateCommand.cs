@@ -33,7 +33,12 @@ namespace MinervaFoods.Application.Pedidos.PedidoCreate
         /// </summary>
         public DateTime DataPedido { get; set; }
 
-  
+
+        /// <summary>
+        /// Observacao do pedido.
+        /// </summary>
+        public string Observacao{ get; set; } = string.Empty;
+
 
         /// <summary>
         /// Lista de itens que compõem o pedido.

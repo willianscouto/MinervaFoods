@@ -34,6 +34,8 @@ namespace MinervaFoods.Api.Features.Pedidos.PedidoModify
         /// </summary>
         public PedidoEnum.Status StatusPedido { get; set; }
 
+        public string Observacao { get; set; } = string.Empty;
+
         /// <summary>
         /// Lista de itens que compõem o pedido.
         /// </summary>

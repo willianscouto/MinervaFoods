@@ -47,7 +47,7 @@ namespace MinervaFoods.Application.Pedidos.PedidoCreate
 
             var proximoNumeroPedido = await _repository.GetProximoNumeroPedidoAsync(cancellationToken);
 
-            var pedido = new Domain.Entities.Pedido(command.CompradorId, proximoNumeroPedido, command.DataPedido);
+            var pedido = new Domain.Entities.Pedido(command.CompradorId, proximoNumeroPedido, command.DataPedido, command.Observacao);
             
             pedido.AdicionarItem(pedidoItens);
             pedido.AdicionarNumeroPedido(proximoNumeroPedido);

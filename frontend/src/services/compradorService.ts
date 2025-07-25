@@ -16,25 +16,25 @@ export const compradorService = {
     });
   },
 
-  create: async (carne: Omit<Comprador, "id">): Promise<Comprador> => {
+  create: async (comprador: Omit<Comprador, "id">): Promise<Comprador> => {
     return proxyRequest<Comprador>({
       path: "api/compradores",
       method: "POST",
-      data: carne,
+      data: comprador,
     });
   },
 
-  update: async (carne: Comprador): Promise<Comprador> => {
+  update: async (comprador: Comprador): Promise<Comprador> => {
     return proxyRequest<Comprador>({
       path: `api/compradores`,
       method: "PUT",
-      data: carne,
+      data: comprador,
     });
   },
 
   delete: async (id: string): Promise<void> => {
     await proxyRequest<null>({
-      path: `api/carnes/${id}`,
+      path: `api/compradores/${id}`,
       method: "DELETE",
     });
   },

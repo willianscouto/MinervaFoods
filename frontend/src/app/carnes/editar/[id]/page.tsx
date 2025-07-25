@@ -11,8 +11,8 @@ import {
 } from "@mui/material";
 import { Carne } from "@/interfaces/Carne";
 import { carneService } from "@/services/carneService";
-import FormInput from "@/components/forms/FormInput";
-import SelectInput from "@/components/forms/SelectInput";
+import FormInput from "@/components/forms/ControllerFormInput";
+import SelectInput from "@/components/forms/ControllerSelectInput";
 import { useRouter, useParams } from "next/navigation";
 import { tipoCarneOptions } from "@/interfaces/enums/TipoCarneEnum";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -102,9 +102,26 @@ export default function EditarCarnePage() {
 
   return (
     <Box component="form" onSubmit={handleSubmit(onSubmit)} noValidate>
-      <Typography variant="h4" gutterBottom>
+    
+       <Stack
+        direction="row"
+        justifyContent="space-between"
+        alignItems="center"
+        mb={2}
+        
+      >
+        <Typography variant="h4" gutterBottom>
         Editar Carne
-      </Typography>
+        </Typography>
+        <Button    
+        variant="outlined"
+          color="secondary"
+          size="large"
+          sx={{ minWidth: 140 }} onClick={() => router.back()}>
+          Voltar
+        </Button>
+      </Stack>
+
 
       <FormInput
         name="ean"
@@ -137,15 +154,7 @@ export default function EditarCarnePage() {
       />
 
       <Stack direction="row" spacing={2} sx={{ mt: 2 }}>
-        <Button
-          variant="outlined"
-          color="secondary"
-          size="large"
-          sx={{ minWidth: 140 }}
-          onClick={() => router.back()}
-        >
-          Voltar
-        </Button>
+      
 
         <Button
           type="submit"

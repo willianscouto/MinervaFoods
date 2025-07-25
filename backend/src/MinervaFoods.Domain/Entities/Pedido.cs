@@ -45,6 +45,12 @@ namespace MinervaFoods.Domain.Entities
         /// </summary>
         public decimal ValorTotal { get; private set; }
 
+
+        /// <summary>
+        /// Valor total do pedido calculado com base nos itens.
+        /// </summary>
+        public string Observacao { get; private set; } = string.Empty;
+
         /// <summary>
         /// Construtor protegido para uso do Entity Framework Core.
         /// </summary>
@@ -56,11 +62,25 @@ namespace MinervaFoods.Domain.Entities
         /// <param name="compradorId">Identificador do comprador.</param>
         /// <param name="numeroPedido">NumeroPedido do comprador.</param>
         /// <param name="dataPedido">Data do pedido.</param>
-        public Pedido(Guid compradorId,long numeroPedido, DateTime dataPedido)
+        public Pedido(Guid compradorId,long numeroPedido, DateTime dataPedido, string observacao)
         {
             CompradorId = compradorId;
             DataPedido = dataPedido;
             StatusPedido = PedidoEnum.Status.Aberto;
+            Observacao = observacao;
+        }
+
+        /// <summary>
+        /// Inicializa um novo pedido com comprador e data do pedido.
+        /// </summary>
+        /// <param name="compradorId">Identificador do comprador.</param>
+        /// <param name="numeroPedido">NumeroPedido do comprador.</param>
+        /// <param name="dataPedido">Data do pedido.</param>
+        public void Atualizar( string observacao, PedidoEnum.Status status)
+        {
+        
+            StatusPedido = status;
+            Observacao = observacao;
         }
 
         /// <summary>

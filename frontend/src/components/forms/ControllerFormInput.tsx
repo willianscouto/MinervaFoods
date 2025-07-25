@@ -11,7 +11,7 @@ interface Props<T extends FieldValues>
   maxLength?: number;
 }
 
-export default function FormInput<T extends FieldValues>({
+export default function ControllerFormInput<T extends FieldValues>({
   name,
   label,
   control,

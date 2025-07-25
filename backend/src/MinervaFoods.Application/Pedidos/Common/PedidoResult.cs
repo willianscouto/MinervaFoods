@@ -47,6 +47,12 @@ namespace MinervaFoods.Application.Pedidos.Common
         /// <summary>
         /// Valor total do pedido calculado com base nos itens.
         /// </summary>
-        public decimal ValorTotal { get;  }
+        public decimal ValorTotal { get; set; }
+
+
+        /// <summary>
+        /// Observacao do pedido.
+        /// </summary>
+        public string Observacao { get; set; } = string.Empty;
     }
 }

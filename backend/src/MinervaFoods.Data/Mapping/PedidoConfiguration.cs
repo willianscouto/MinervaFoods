@@ -26,6 +26,8 @@ namespace MinervaFoods.Data.Mapping
                    .IsRequired()
                    .HasColumnType("datetime");
 
+            builder.Property(p => p.Observacao);
+
             builder.Property(p => p.StatusPedido)
                    .IsRequired()
                    .HasConversion<int>(); 

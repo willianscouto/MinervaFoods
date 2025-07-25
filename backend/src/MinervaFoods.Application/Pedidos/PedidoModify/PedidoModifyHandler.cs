@@ -108,6 +108,7 @@ namespace MinervaFoods.Application.Pedidos.PedidoModify
 
             pedido.ClearItens();
             pedido.AdicionarItem(allPedidosItens);
+            pedido.Atualizar(command.Observacao, command.StatusPedido);
             await _repository.UpdateAsync(pedido);
 
             return _mapper.Map<PedidoResult>(pedido);

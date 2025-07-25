@@ -45,5 +45,11 @@ namespace MinervaFoods.Api.Features.Pedidos.Common
         /// </summary>
         public ICollection<PedidoItemResponse> PedidoItem { get; set; } = new List<PedidoItemResponse>();
 
+
+        /// <summary>
+        /// Valor total do pedido calculado com base nos itens.
+        /// </summary>
+        public decimal ValorTotal { get; set; }
+
     }
 }
