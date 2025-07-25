@@ -1,7 +1,7 @@
 "use client";
 
 import { useForm } from "react-hook-form";
-import { Button, Typography, Box, Stack } from "@mui/material";
+import { Button, Typography, Box, Stack,Divider } from "@mui/material";
 import { Carne } from "@/interfaces/Carne";
 import { carneService } from "@/services/carneService";
 import FormInput from "@/components/forms/ControllerFormInput";
@@ -46,7 +46,7 @@ export default function CadastroCarne() {
         direction="row"
         justifyContent="space-between"
         alignItems="center"
-        mb={2}
+        mb={1}
       >
         <Typography variant="h4" gutterBottom>
           Cadastro de Carne
@@ -58,8 +58,9 @@ export default function CadastroCarne() {
           sx={{ minWidth: 140 }} onClick={() => router.back()}>
           Voltar
         </Button>
+      
       </Stack>
-
+    
       <FormInput
         name="ean"
         label="EAN"

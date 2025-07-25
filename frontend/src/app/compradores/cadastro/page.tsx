@@ -147,9 +147,9 @@ export default function CadastroComprador() {
         direction="row"
         justifyContent="space-between"
         alignItems="center"
-        mb={2}
+        mb={1}
       >
-        <Typography variant="h4" gutterBottom>
+        <Typography variant="h4">
           Cadastro de Comprador
         </Typography>
         <Button    
