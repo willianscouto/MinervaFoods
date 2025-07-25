@@ -177,9 +177,7 @@ export default function ListaPedidos() {
                   <TableCell>
                     {StatusPedidoEnum[pedido.statusPedido!]}
                   </TableCell>
-                  <TableCell>
-                    <TableCell>{formatarMoeda(pedido.valorTotal)}</TableCell>
-                  </TableCell>
+                 <TableCell>{formatarMoeda(pedido.valorTotal)}</TableCell>
                   <TableCell>
                     <IconButton
                       size="small"
