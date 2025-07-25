@@ -43,7 +43,7 @@ import { formatarDataHoraInput } from "@/utils/converter";
 import { v4 as uuidv4 } from "uuid";
 
 const headerCellStyle = {
-  backgroundColor: "#E3000F",
+  backgroundColor: "#E84752",
   color: "#fff",
   fontWeight: "bold",
 };
@@ -323,7 +323,7 @@ export default function CadastroPedido() {
                   </TableCell>
                   <TableCell>{carne?.label || item.carneId}</TableCell>
                   <TableCell>{item.quantidade}</TableCell>
-                  <TableCell>{item.moeda}</TableCell>
+                  <TableCell>{MoedaEnum[item.moeda!]}</TableCell>
                   <TableCell>{item.precoUnitario.toFixed(2)}</TableCell>
                 </TableRow>
               );

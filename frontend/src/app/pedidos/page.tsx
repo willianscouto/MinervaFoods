@@ -35,7 +35,7 @@ import { formatarDataExibicao, formatarMoeda } from "@/utils/converter";
 import { MoedaEnum } from "@/interfaces/enums/MoedaEnum";
 
 const headerCellStyle = {
-  backgroundColor: "#E3000F",
+  backgroundColor: "#E84752",
   color: "#fff",
   fontWeight: "bold",
 };

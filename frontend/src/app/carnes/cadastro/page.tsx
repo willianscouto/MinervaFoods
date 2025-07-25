@@ -89,7 +89,8 @@ export default function CadastroCarne() {
         options={tipoCarneOptions}
       />
 
-      <Button type="submit" variant="contained" color="primary" sx={{ mt: 2 }}>
+      <Button type="submit" variant="contained" color="primary"  size="large"
+          sx={{ minWidth: 140 }}>
         Salvar
       </Button>
     </Box>

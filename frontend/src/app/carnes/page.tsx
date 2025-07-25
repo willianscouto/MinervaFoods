@@ -31,7 +31,7 @@ import { useToast } from "@/contexts/ToastContext";
 import { TipoCarneEnum } from "@/interfaces/enums/TipoCarneEnum";
 
 const headerCellStyle = {
-  backgroundColor: "#E3000F",
+  backgroundColor: "#E84752",
   color: "#fff",
   fontWeight: "bold",
 };

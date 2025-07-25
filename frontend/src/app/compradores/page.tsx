@@ -30,7 +30,7 @@ import { compradorService } from "@/services/compradorService";
 import { useToast } from "@/contexts/ToastContext";
 
 const headerCellStyle = {
-  backgroundColor: "#E3000F",
+  backgroundColor: "#E84752",
   color: "#fff",
   fontWeight: "bold",
 };

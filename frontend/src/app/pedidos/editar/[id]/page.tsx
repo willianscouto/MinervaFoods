@@ -1,4 +1,4 @@
-'use client';
+"use client";
 
 import { useEffect, useState } from "react";
 import { useForm, SubmitHandler, useFieldArray } from "react-hook-form";
@@ -19,7 +19,7 @@ import {
   Paper,
   IconButton,
   Divider,
-  TextField
+  TextField,
 } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 
@@ -36,13 +36,16 @@ import { yupResolver } from "@hookform/resolvers/yup";
 
 import { Pedido } from "@/interfaces/Pedido";
 import { PedidoItem } from "@/interfaces/PedidoItem";
-import { StatusPedidoEnum, situacaoPedidoOptions } from "@/interfaces/enums/StatusPedidoEnum";
+import {
+  StatusPedidoEnum,
+  situacaoPedidoOptions,
+} from "@/interfaces/enums/StatusPedidoEnum";
 import { MoedaEnum, moedaOptions } from "@/interfaces/enums/MoedaEnum";
-import { formatarDataHoraInput } from "@/utils/converter"
+import { formatarDataHoraInput } from "@/utils/converter";
 import { v4 as uuidv4 } from "uuid";
 
 const headerCellStyle = {
-  backgroundColor: "#E3000F",
+  backgroundColor: "#E84752",
   color: "#fff",
   fontWeight: "bold",
 };
@@ -103,7 +106,7 @@ export default function EditarPedido() {
         const [compradores, carnes, pedido] = await Promise.all([
           compradorService.getAll(),
           carneService.getAll(),
-          pedidoService.getById(id)
+          pedidoService.getById(id),
         ]);
 
         setTemCompradores(compradores.length > 0);
@@ -118,7 +121,7 @@ export default function EditarPedido() {
         if (pedido) {
           reset({
             ...pedido,
-            dataPedido: formatarDataHoraInput(pedido.dataPedido)
+            dataPedido: formatarDataHoraInput(pedido.dataPedido),
           });
         }
       } catch (error) {
@@ -185,11 +188,11 @@ export default function EditarPedido() {
         message: "Pedido atualizado com sucesso!",
         severity: "success",
       });
-      router.push('/pedidos');
+      router.push("/pedidos");
     } catch (error) {
-      openToast({ 
-        message: "Erro ao atualizar pedido: " + error, 
-        severity: "error" 
+      openToast({
+        message: "Erro ao atualizar pedido: " + error,
+        severity: "error",
       });
     } finally {
       setIsSaving(false);
@@ -254,7 +257,7 @@ export default function EditarPedido() {
         />
 
         <ControllerFormInput
-          name="observacoes"
+          name="observacao"
           label="Observações"
           control={control}
           multiline
@@ -269,7 +272,9 @@ export default function EditarPedido() {
           name="carneId"
           label="Carne"
           value={novoItem.carneId}
-          onChange={(e) => setNovoItem({...novoItem, carneId: e.target.value})}
+          onChange={(e) =>
+            setNovoItem({ ...novoItem, carneId: e.target.value })
+          }
           required
           options={carnesOptions}
         />
@@ -278,7 +283,9 @@ export default function EditarPedido() {
           name="moeda"
           label="Moeda"
           value={novoItem.moeda}
-          onChange={(e) => setNovoItem({...novoItem, moeda: e.target.value as MoedaEnum})}
+          onChange={(e) =>
+            setNovoItem({ ...novoItem, moeda: e.target.value as MoedaEnum })
+          }
           required
           options={moedaOptions}
         />
@@ -289,9 +296,11 @@ export default function EditarPedido() {
           label="Quantidade"
           type="number"
           value={novoItem.quantidade}
-          onChange={(e) => setNovoItem({...novoItem, quantidade: Number(e.target.value)})}
+          onChange={(e) =>
+            setNovoItem({ ...novoItem, quantidade: Number(e.target.value) })
+          }
           required
-          inputProps={{min: 1}}
+          inputProps={{ min: 1 }}
         />
 
         <TextField
@@ -300,9 +309,11 @@ export default function EditarPedido() {
           label="Preço Unitário"
           type="number"
           value={novoItem.precoUnitario}
-          onChange={(e) => setNovoItem({...novoItem, precoUnitario: Number(e.target.value)})}
+          onChange={(e) =>
+            setNovoItem({ ...novoItem, precoUnitario: Number(e.target.value) })
+          }
           required
-          inputProps={{min: 0.01, step: 0.01}}
+          inputProps={{ min: 0.01, step: 0.01 }}
         />
 
         <Button
@@ -337,7 +348,7 @@ export default function EditarPedido() {
             {fields.map((item, index) => {
               const carne = carnesOptions.find((c) => c.value === item.carneId);
               const total = (item.quantidade || 0) * (item.precoUnitario || 0);
-              
+
               return (
                 <TableRow key={item.id}>
                   <TableCell>
@@ -351,7 +362,7 @@ export default function EditarPedido() {
                   </TableCell>
                   <TableCell>{carne?.label || item.carneId}</TableCell>
                   <TableCell>{item.quantidade}</TableCell>
-                  <TableCell>{item.moeda}</TableCell>
+                  <TableCell>{MoedaEnum[item.moeda!]}</TableCell>
                   <TableCell>{item.precoUnitario?.toFixed(2)}</TableCell>
                   <TableCell>{total.toFixed(2)}</TableCell>
                 </TableRow>

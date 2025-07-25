@@ -1,4 +1,3 @@
-// components/MinervaFoodsLayout.tsx
 'use client';
 
 import {
@@ -14,6 +13,7 @@ import {
   Typography,
 } from '@mui/material';
 import Link from 'next/link';
+import Image from 'next/image';
 import { ReactNode } from 'react';
 
 const drawerWidth = 240;
@@ -22,10 +22,17 @@ export default function MinervaFoodsLayout({ children }: { children: ReactNode }
   return (
     <Box sx={{ display: 'flex' }}>
       <CssBaseline />
-      <AppBar position="fixed" sx={{ zIndex: 1201 }}>
-        <Toolbar>
+      <AppBar position="fixed" sx={{ zIndex: 1201, backgroundColor: '#E84752' }}>
+        <Toolbar sx={{ display: 'flex', alignItems: 'center' }}>
+          <Image
+            src="/minerva-logo.png" 
+            alt="Minerva Logo"
+            width={64}
+            height={64}
+            style={{ marginRight: 12 }}
+          />
           <Typography variant="h6" noWrap>
-            Minerva Foods – Gestão de Carnes
+           Teste Minerva Foods - Desenvolvedor: Leonardo Willians Couto
           </Typography>
         </Toolbar>
       </AppBar>
