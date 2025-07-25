@@ -89,26 +89,31 @@ Node.js + npm
 cd backend
 
 #### Apagar migrações antigas (se houver)
-rm -r src/MinervaFoods.Data/Migrations
+```rm -r src/MinervaFoods.Data/Migrations```
 
 #### Aplicar as migrações e atualizar o banco
-dotnet ef database update --verbose \
+```
+   dotnet ef database update --verbose \
   --project src/MinervaFoods.Data \
   --startup-project src/MinervaFoods.Api
+```
 
 #### Rodar a API
 dotnet run --project src/MinervaFoods.Api
 A API será exposta em: https://localhost:8081 ou http://localhost:8080
 
 ### 🧑‍🎨 Frontend (React + Next.js)
-
+```
 cd frontend
-
+```
 #### Instalar dependências
+```
 npm install
-
+```
 #### Rodar o projeto em modo desenvolvimento
+```
 npm run dev
+```
 A aplicação estará acessível em: http://localhost:3000
 
 #### 📚 Funcionalidades Implementadas

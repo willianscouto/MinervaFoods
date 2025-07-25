@@ -35,7 +35,7 @@ public class PedidoItemModifyHandler : IRequestHandler<PedidoItemModifyCommand, 
 
         foreach (var item in pedidosItens)
         {
-            if (item.Moeda == Domain.Enums.PedidoItemEnum.Moeda.BRL) { item.AtualizarValorCotacao(item.PrecoUnitario); continue; }
+            if (item.Moeda == Domain.Enums.PedidoItemEnum.Moeda.BRL) { item.AtualizarValorCotacao(1); continue; }
             var cotacaoMoeda = await _cotacaoService.GetMoedaCotacoes(item.Moeda.ToString(), cancellationToken);
             var itensCommand = command.Itens.Where(x => x.Id == item.Id).FirstOrDefault();
             if (cotacaoMoeda == null)

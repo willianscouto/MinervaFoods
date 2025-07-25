@@ -106,6 +106,16 @@ namespace MinervaFoods.Application.Pedidos.PedidoModify
                 allPedidosItens.AddRange(_mapper.Map<IEnumerable<PedidoItem>>(resultAdd));
             }
 
+            var itensNotToUpdate = pedido.PedidoItem
+             .Where(c =>
+                 command.PedidoItem.Any(item =>
+                     item.CarneId == c.CarneId &&
+                     item.Moeda == c.Moeda &&
+                     (c.Quantidade == item.Quantidade && c.PrecoUnitario == item.PrecoUnitario && c.Cotacao == item.Cotacao)))
+             .ToList();
+            allPedidosItens.AddRange(itensNotToUpdate);
+
+
             pedido.ClearItens();
             pedido.AdicionarItem(allPedidosItens);
             pedido.Atualizar(command.Observacao, command.StatusPedido);
