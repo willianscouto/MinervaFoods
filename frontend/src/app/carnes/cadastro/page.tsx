@@ -74,6 +74,13 @@ export default function CadastroCarne() {
         required
         maxLength={90}
       />
+       <FormInput
+        name="unidadeMedida"
+        label="Unidade Medida"
+        control={control}
+        required
+        maxLength={5}
+      />
       <SelectInput
         name="tipoCarne"
         label="Tipo"

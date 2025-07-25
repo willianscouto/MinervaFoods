@@ -39,7 +39,7 @@ import { Pedido } from "@/interfaces/Pedido";
 import { PedidoItem } from "@/interfaces/PedidoItem";
 import { StatusPedidoEnum } from "@/interfaces/enums/StatusPedidoEnum";
 import { MoedaEnum, moedaOptions } from "@/interfaces/enums/MoedaEnum";
-import { formatarDataExibicao } from "@/utils/converter";
+import { formatarDataHoraInput } from "@/utils/converter";
 import { v4 as uuidv4 } from "uuid";
 
 const headerCellStyle = {
@@ -77,9 +77,9 @@ export default function CadastroPedido() {
     resolver: yupResolver(pedidoValidation),
     defaultValues: {
       compradorId: "",
-      dataPedido: formatarDataExibicao(new Date()),
+      dataPedido: formatarDataHoraInput(new Date()),
       pedidoItem: [],
-      observacoes: "",
+      observacao: "",
       id: null,
       numeroPedido: null,
       comprador: null,
@@ -163,7 +163,10 @@ export default function CadastroPedido() {
   }
 
   const onSubmit: SubmitHandler<Pedido> = async (data) => {
-     try {
+     if(!data.compradorId) 
+     openToast({ message: "Favor informar o compradodr", severity: "error" });
+    
+    try {
       await pedidoService.create(data);
         openToast({
         message: "Pedido cadastrado com sucesso!",
@@ -226,8 +229,8 @@ export default function CadastroPedido() {
         />
 
         <ControllerFormInput
-          name="observacoes"
-          label="Observações"
+          name="observacao"
+          label="Observacao"
           control={control}
           multiline
           rows={4}

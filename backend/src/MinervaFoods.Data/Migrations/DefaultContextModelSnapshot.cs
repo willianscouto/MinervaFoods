@@ -248,7 +248,6 @@ namespace MinervaFoods.Data.Migrations
                         .HasColumnType("bigint");
 
                     b.Property<string>("Observacao")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("Status")

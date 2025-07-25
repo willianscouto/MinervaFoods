@@ -38,7 +38,7 @@ import { Pedido } from "@/interfaces/Pedido";
 import { PedidoItem } from "@/interfaces/PedidoItem";
 import { StatusPedidoEnum, situacaoPedidoOptions } from "@/interfaces/enums/StatusPedidoEnum";
 import { MoedaEnum, moedaOptions } from "@/interfaces/enums/MoedaEnum";
-import { formatarDataHoraInput } from "@/utils/dateUtils";
+import { formatarDataHoraInput } from "@/utils/converter"
 import { v4 as uuidv4 } from "uuid";
 
 const headerCellStyle = {
@@ -52,7 +52,7 @@ type Option = { value: string; label: string };
 export default function EditarPedido() {
   const { openToast } = useToast();
   const params = useParams();
-  const id = params.id as string;
+  const id = params!.id as string;
   const [temCompradores, setTemCompradores] = useState(false);
   const [temCarnes, setTemCarnes] = useState(false);
   const [compradoresOptions, setCompradoresOptions] = useState<Option[]>([]);
@@ -82,7 +82,7 @@ export default function EditarPedido() {
       compradorId: "",
       dataPedido: formatarDataHoraInput(new Date()),
       pedidoItem: [],
-      observacoes: "",
+      observacao: "",
       id: null,
       numeroPedido: null,
       comprador: null,

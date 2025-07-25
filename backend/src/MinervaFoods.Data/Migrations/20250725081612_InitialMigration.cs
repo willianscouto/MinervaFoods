@@ -107,7 +107,7 @@ namespace MinervaFoods.Data.Migrations
                     DataPedido = table.Column<DateTime>(type: "datetime", nullable: false),
                     StatusPedido = table.Column<int>(type: "int", nullable: false),
                     ValorTotal = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
-                    Observacao = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Observacao = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Status = table.Column<bool>(type: "bit", nullable: false),
                     IdUserCreated = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "GETDATE()"),
@@ -161,22 +161,7 @@ namespace MinervaFoods.Data.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
-            migrationBuilder.CreateIndex(
-                name: "IX_Pedidos_CompradorId",
-                table: "Pedidos",
-                column: "CompradorId",
-                unique: true);
-
-            migrationBuilder.CreateIndex(
-                name: "IX_PedidosItens_CarneId",
-                table: "PedidosItens",
-                column: "CarneId",
-                unique: true);
-
-            migrationBuilder.CreateIndex(
-                name: "IX_PedidosItens_PedidoId",
-                table: "PedidosItens",
-                column: "PedidoId");
+         
         }
 
         /// <inheritdoc />

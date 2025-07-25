@@ -1,13 +1,12 @@
-"use client";
+'use client';
 
-import React, { useEffect, useState } from "react";
-import { useForm, Controller } from "react-hook-form";
+import { useEffect, useState } from "react";
+import { useForm } from "react-hook-form";
 import {
   Box,
   Button,
   Typography,
   Stack,
-  TextField,
   CircularProgress,
 } from "@mui/material";
 import { useRouter, useParams } from "next/navigation";
@@ -19,10 +18,10 @@ import { estadoService } from "@/services/estadoService";
 import { Comprador } from "@/interfaces/Comprador";
 import { Pais } from "@/interfaces/Pais";
 import { Estado } from "@/interfaces/Estado";
-import SelectInput from "@/components/forms/ControllerSelectInput";
-import {formatarDataHoraInput} from "@/utils/converter";
-
-type FormData = Omit<Comprador, "id">;
+import ControllerFormInput from "@/components/forms/ControllerFormInput";
+import ControllerSelectInput from "@/components/forms/ControllerSelectInput";
+import { yupResolver } from "@hookform/resolvers/yup";
+import { compradorValidation } from "@/validation/compradorValidation";
 
 export default function EditarComprador() {
   const { openToast } = useToast();
@@ -36,25 +35,39 @@ export default function EditarComprador() {
   const [paises, setPaises] = useState<Pais[]>([]);
   const [estados, setEstados] = useState<Estado[]>([]);
 
-
-
   const {
     handleSubmit,
     control,
     watch,
     setValue,
-    getValues,
     reset,
-    formState: { errors },
-  } = useForm<FormData>();
+    formState: { errors, isSubmitting },
+  } = useForm<Comprador>({
+    resolver: yupResolver(compradorValidation),
+    defaultValues: {
+      nome: "",
+      documento: "",
+      email: "",
+      telefone: "",
+      dataNascimento: null,
+      cep: "",
+      logradouro: "",
+      numero: "",
+      complemento: "",
+      bairro: "",
+      cidade: "",
+      estado: "",
+      pais: "",
+    },
+  });
 
   const cep = watch("cep");
   const paisSelecionado = watch("pais");
 
-
   // Carregar comprador existente
   useEffect(() => {
     if (!compradorId) return;
+    
     compradorService
       .getById(compradorId)
       .then((data) => {
@@ -99,6 +112,7 @@ export default function EditarComprador() {
   const handleConsultarCep = async () => {
     const cepLimpo = cep?.replace(/\D/g, "");
     if (!cepLimpo || cepLimpo.length !== 8) return;
+    
     setLoadingCep(true);
     try {
       const response = await cepService.getCep(cepLimpo);
@@ -125,22 +139,7 @@ export default function EditarComprador() {
     }
   };
 
-  // Ajusta estadoId pelo UF
-  useEffect(() => {
-    const uf = getValues("estado");
-    if (!uf || estados.length === 0) return;
-    let estadoEncontrado = estados.find((e) => e.sigla === uf);
-    if (estadoEncontrado) {
-      setValue("estado", estadoEncontrado.sigla);
-    }
-    else {
-
-     estadoEncontrado = estados.find((e) => e.id === uf);
-    setValue("estado", estadoEncontrado?.sigla);
-    }
-  }, [estados]);
-
-  const onSubmit = async (data: FormData) => {
+  const onSubmit = async (data: Comprador) => {
     try {
       const enderecoCompleto = `${data.logradouro}, ${data.numero}`;
       const payload = {
@@ -167,251 +166,111 @@ export default function EditarComprador() {
 
   return (
     <Box component="form" onSubmit={handleSubmit(onSubmit)} noValidate>
-      <Typography variant="h4" gutterBottom>
-        Editar Comprador
-      </Typography>
+      <Stack
+        direction="row"
+        justifyContent="space-between"
+        alignItems="center"
+        mb={2}
+      >
+        <Typography variant="h4" gutterBottom>
+          Editar Comprador
+        </Typography>
+        <Button    
+          variant="outlined"
+          color="secondary"
+          size="large"
+          sx={{ minWidth: 140 }} 
+          onClick={() => router.back()}
+        >
+          Voltar
+        </Button>
+      </Stack>
 
       <Stack spacing={2}>
-        {/* Nome */}
-        <Controller
+        <ControllerFormInput
           name="nome"
+          label="Nome"
           control={control}
-          rules={{
-            required: "Nome é obrigatório",
-            maxLength: { value: 200, message: "Máximo 200 caracteres" },
-          }}
-          render={({ field }) => (
-            <TextField
-              {...field}
-              label="Nome"
-              error={!!errors.nome}
-              helperText={errors.nome?.message}
-              fullWidth
-              required
-            />
-          )}
+          required
         />
 
-        {/* Documento */}
-        <Controller
+        <ControllerFormInput
           name="documento"
+          label="Documento"
           control={control}
-          rules={{
-            required: "Documento é obrigatório",
-            maxLength: { value: 20, message: "Máximo 20 caracteres" },
-          }}
-          render={({ field }) => (
-            <TextField
-              {...field}
-              label="Documento"
-              error={!!errors.documento}
-              helperText={errors.documento?.message}
-              fullWidth
-              required
-            />
-          )}
+          required
         />
 
-        {/* Email */}
-        <Controller
+        <ControllerFormInput
           name="email"
+          label="Email"
           control={control}
-          rules={{
-            required: "Email é obrigatório",
-            pattern: {
-              value: /^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/,
-              message: "Email inválido",
-            },
-          }}
-          render={({ field }) => (
-            <TextField
-              {...field}
-              label="Email"
-              error={!!errors.email}
-              helperText={errors.email?.message}
-              fullWidth
-              required
-            />
-          )}
+          required
         />
 
-        {/* Telefone */}
-        <Controller
+        <ControllerFormInput
           name="telefone"
+          label="Telefone"
           control={control}
-          rules={{
-            maxLength: { value: 20, message: "Máximo 20 caracteres" },
-          }}
-          render={({ field }) => (
-            <TextField
-              {...field}
-              label="Telefone"
-              error={!!errors.telefone}
-              helperText={errors.telefone?.message}
-              fullWidth
-            />
-          )}
         />
 
-        {/* Data Nascimento */}
-        <Controller
+        <ControllerFormInput
           name="dataNascimento"
+          label="Data de Nascimento"
           control={control}
-          rules={{
-            required: "Data de nascimento é obrigatória",
-            validate: (value) => {
-              if (!value) return true; // permitido vazio se opcional
-              const data = new Date(value);
-              if (isNaN(data.getTime())) return "Data inválida";
-              if (data >= new Date()) return "Data deve ser anterior à hoje";
-              return true;
-            },
-          }}
-          render={({ field }) => (
-            <TextField
-              {...field}
-              label="Data de Nascimento"
-              type="date"
-              InputLabelProps={{ shrink: true }}
-              error={!!errors.dataNascimento}
-              helperText={errors.dataNascimento?.message}
-                value={formatarDataHoraInput(field.value)}
-              fullWidth
-              required
-            />
-          )}
+          type="date"
+          InputLabelProps={{ shrink: true }}
         />
 
-        {/* CEP */}
-        <Controller
+        <ControllerFormInput
           name="cep"
+          label="CEP"
           control={control}
-          rules={{
-            required: "CEP é obrigatório",
-            minLength: {
-              value: 3,
-              message: "CEP deve ter ao menos 3 caracteres",
-            },
+          onBlur={handleConsultarCep}
+          disabled={loadingCep}
+          InputProps={{
+            endAdornment: loadingCep ? <CircularProgress size={24} /> : null,
           }}
-          render={({ field }) => (
-            <TextField
-              {...field}
-              label="CEP"
-              error={!!errors.cep}
-              helperText={errors.cep?.message}
-              fullWidth
-              disabled={loadingCep}
-              required
-              onBlur={handleConsultarCep}
-            />
-          )}
         />
-        {loadingCep && <CircularProgress size={24} />}
 
-        <Controller
+        <ControllerFormInput
           name="logradouro"
+          label="Logradouro"
           control={control}
-          rules={{
-            maxLength: { value: 200, message: "Máximo 200 caracteres" },
-            required:
-              !cepValido &&
-              "Logradouro é obrigatório quando CEP não encontrado",
-          }}
-          render={({ field }) => (
-            <TextField
-              {...field}
-              label="Logradouro"
-              error={!!errors.logradouro}
-              helperText={errors.logradouro?.message}
-              fullWidth
-              disabled={cepValido}
-              required={!cepValido}
-            />
-          )}
+          disabled={cepValido}
+          required={!cepValido}
         />
 
-        {/* Numero */}
-        <Controller
+        <ControllerFormInput
           name="numero"
+          label="Número"
           control={control}
-          rules={{ required: "Número é obrigatório" }}
-          render={({ field }) => (
-            <TextField
-              {...field}
-              label="Número"
-              error={!!errors.numero}
-              helperText={errors.numero?.message}
-              fullWidth
-              required
-            />
-          )}
+          required
         />
 
-        {/* Complemento */}
-        <Controller
+        <ControllerFormInput
           name="complemento"
+          label="Complemento"
           control={control}
-          rules={{
-            maxLength: { value: 100, message: "Máximo 100 caracteres" },
-          }}
-          render={({ field }) => (
-            <TextField
-              {...field}
-              label="Complemento"
-              error={!!errors.complemento}
-              helperText={errors.complemento?.message}
-              fullWidth
-              disabled={!cepValido ? false : false} // sempre liberado
-            />
-          )}
         />
 
-        {/* Bairro */}
-        <Controller
+        <ControllerFormInput
           name="bairro"
+          label="Bairro"
           control={control}
-          rules={{
-            maxLength: { value: 100, message: "Máximo 100 caracteres" },
-            required:
-              !cepValido && "Bairro é obrigatório quando CEP não encontrado",
-          }}
-          render={({ field }) => (
-            <TextField
-              {...field}
-              label="Bairro"
-              error={!!errors.bairro}
-              helperText={errors.bairro?.message}
-              fullWidth
-              disabled={cepValido}
-              required={!cepValido}
-            />
-          )}
+          disabled={cepValido}
+          required={!cepValido}
         />
 
-        {/* Cidade */}
-        <Controller
+        <ControllerFormInput
           name="cidade"
+          label="Cidade"
           control={control}
-          rules={{
-            maxLength: { value: 100, message: "Máximo 100 caracteres" },
-            required:
-              !cepValido && "Cidade é obrigatória quando CEP não encontrado",
-          }}
-          render={({ field }) => (
-            <TextField
-              {...field}
-              label="Cidade"
-              error={!!errors.cidade}
-              helperText={errors.cidade?.message}
-              fullWidth
-              disabled={cepValido}
-              required={!cepValido}
-            />
-          )}
+          disabled={cepValido}
+          required={!cepValido}
         />
 
-        {/* País (select) */}
-        <SelectInput
+        <ControllerSelectInput
           name="pais"
           label="País"
           control={control}
@@ -420,8 +279,7 @@ export default function EditarComprador() {
           disabled={cepValido}
         />
 
-        {/* Estado (select dinâmico baseado no país) */}
-        <SelectInput
+        <ControllerSelectInput
           name="estado"
           label="Estado"
           control={control}
@@ -434,18 +292,16 @@ export default function EditarComprador() {
         />
       </Stack>
 
-      <Stack direction="row" spacing={2} sx={{ mt: 3 }}>
-        <Button
-          variant="outlined"
-          color="secondary"
-          onClick={() => router.back()}
-        >
-          Voltar
-        </Button>
-        <Button type="submit" variant="contained" color="primary">
-          Salvar
-        </Button>
-      </Stack>
+      <Button
+        type="submit"
+        variant="contained"
+        color="primary"
+        size="large"
+        sx={{ mt: 3, minWidth: 140 }}
+        disabled={isSubmitting}
+      >
+        {isSubmitting ? <CircularProgress size={24} /> : "Salvar"}
+      </Button>
     </Box>
   );
 }

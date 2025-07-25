@@ -5,6 +5,9 @@
 /**
  * Formata uma data para exibição (dd/MM/yyyy)
  */
+
+
+
 export const formatarDataExibicao = (
   value: string | Date | null | undefined
 ): string => {
@@ -21,6 +24,26 @@ export const formatarDataExibicao = (
   return `${dia}/${mes}/${ano}`;
 };
 
+export const formatarDataHoraExibicao = (
+  value: string | Date | null | undefined
+): string => {
+  if (!value) return "";
+  
+  const data = new Date(value);
+  
+  if (isNaN(data.getTime())) return "";
+
+  const pad = (n: number) => n.toString().padStart(2, '0');
+
+  const dia = data.getDate().toString().padStart(2, '0');
+  const mes = (data.getMonth() + 1).toString().padStart(2, '0');
+  const ano = data.getFullYear();
+  const hour = pad(data.getHours());
+  const minute = pad(data.getMinutes());
+
+  return `${dia}/${mes}/${ano} ${hour}:${minute}`;
+};
+
 /**
  * Formata uma data para input type="date" (yyyy-MM-dd)
  */
@@ -33,12 +56,18 @@ export const formatarDataInput = (
   
   if (isNaN(data.getTime())) return "";
 
-  // Ajusta para o fuso horário local
-  const offset = data.getTimezoneOffset();
-  data.setMinutes(data.getMinutes() - offset);
+  const pad = (n: number) => n.toString().padStart(2, '0');
+  
+  const year = data.getFullYear();
+  const month = pad(data.getMonth() + 1);
+  const day = pad(data.getDate());
 
-  return data.toISOString().split('T')[0];
+
+  return `${year}-${month}-${day}`;
 };
+
+
+
 
 /**
  * Formata data e hora para input type="datetime-local" (yyyy-MM-ddTHH:mm)

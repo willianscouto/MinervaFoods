@@ -12,8 +12,8 @@ using MinervaFoods.Data;
 namespace MinervaFoods.Data.Migrations
 {
     [DbContext(typeof(DefaultContext))]
-    [Migration("20250725003507_FakeRegistros")]
-    partial class FakeRegistros
+    [Migration("20250725081612_InitialMigration")]
+    partial class InitialMigration
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -251,7 +251,6 @@ namespace MinervaFoods.Data.Migrations
                         .HasColumnType("bigint");
 
                     b.Property<string>("Observacao")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("Status")

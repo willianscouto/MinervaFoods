@@ -61,7 +61,7 @@ export const pedidoValidation =yup.object().shape({
     .min(0, "Valor total não pode ser negativo")
     .notRequired()
     .default(null),
-  observacoes: yup
+  observacao: yup
     .string()
     .max(500, "Observações devem ter no máximo 500 caracteres")
     .notRequired()

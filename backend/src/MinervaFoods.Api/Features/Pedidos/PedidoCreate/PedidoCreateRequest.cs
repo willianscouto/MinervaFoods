@@ -20,7 +20,7 @@ namespace MinervaFoods.Api.Features.Pedidos.PedidoCreate
         public DateTime DataPedido { get; set; }
 
 
-        public string Observacao { get;  set; }
+        public string? Observacao { get; set; }
 
         /// <summary>
         /// Lista de itens que compõem o pedido.

@@ -49,7 +49,7 @@ namespace MinervaFoods.Domain.Entities
         /// <summary>
         /// Valor total do pedido calculado com base nos itens.
         /// </summary>
-        public string Observacao { get; private set; } = string.Empty;
+        public string? Observacao { get; set; }
 
         /// <summary>
         /// Construtor protegido para uso do Entity Framework Core.

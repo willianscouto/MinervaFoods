@@ -38,6 +38,7 @@ public class PedidoItemCreateHandler : IRequestHandler<PedidoItemCreateCommand, 
 
         foreach (var item in pedidosItens)
         {
+            if (item.Moeda == Domain.Enums.PedidoItemEnum.Moeda.BRL) { item.AtualizarValorCotacao(item.PrecoUnitario); continue; }
             var cotacaoMoeda = await _cotacaoService.GetMoedaCotacoes(item.Moeda.ToString(), cancellationToken);
 
             if (cotacaoMoeda == null)

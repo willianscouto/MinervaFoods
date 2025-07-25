@@ -12,5 +12,5 @@ export interface Pedido {
   pedidoItem: PedidoItem[];
   statusPedido?: StatusPedidoEnum;
   valorTotal: number | null;
-  observacoes: string | null;
+  observacao: string | null;
 }

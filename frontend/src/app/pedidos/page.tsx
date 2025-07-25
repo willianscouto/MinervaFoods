@@ -32,6 +32,7 @@ import { pedidoService } from "@/services/pedidoService";
 import { useToast } from "@/contexts/ToastContext";
 import { StatusPedidoEnum } from "@/interfaces/enums/StatusPedidoEnum";
 import { formatarDataExibicao, formatarMoeda } from "@/utils/converter";
+import { MoedaEnum } from "@/interfaces/enums/MoedaEnum";
 
 const headerCellStyle = {
   backgroundColor: "#E3000F",
@@ -177,7 +178,7 @@ export default function ListaPedidos() {
                     {StatusPedidoEnum[pedido.statusPedido!]}
                   </TableCell>
                   <TableCell>
-                     <TableCell>{formatarMoeda(pedido.valorTotal)}</TableCell>
+                    <TableCell>{formatarMoeda(pedido.valorTotal)}</TableCell>
                   </TableCell>
                   <TableCell>
                     <IconButton
@@ -231,8 +232,9 @@ export default function ListaPedidos() {
                   <TableCell sx={headerCellStyle}>Carne</TableCell>
                   <TableCell sx={headerCellStyle}>Quantidade</TableCell>
                   <TableCell sx={headerCellStyle}>Preço Unitário</TableCell>
-                  <TableCell sx={headerCellStyle}>Total</TableCell>
+                  <TableCell sx={headerCellStyle}>Moeda</TableCell>
                   <TableCell sx={headerCellStyle}>Cotação</TableCell>
+                  <TableCell sx={headerCellStyle}>Total</TableCell>
                   <TableCell sx={headerCellStyle}>
                     Valor Total Cotação R$
                   </TableCell>
@@ -244,9 +246,12 @@ export default function ListaPedidos() {
                     <TableCell>{item.carne?.nome || item.carneId}</TableCell>
                     <TableCell>{item.quantidade}</TableCell>
                     <TableCell>{item.precoUnitario}</TableCell>
-                    <TableCell>{item.total}</TableCell>
+                    <TableCell>{MoedaEnum[item.moeda!]}</TableCell>
                     <TableCell>{item.cotacao}</TableCell>
-                    <TableCell>{formatarMoeda(item.valorTotalCotacao)}</TableCell>
+                    <TableCell>{item.total}</TableCell>
+                    <TableCell>
+                      {formatarMoeda(item.valorTotalCotacao)}
+                    </TableCell>
                   </TableRow>
                 ))}
               </TableBody>

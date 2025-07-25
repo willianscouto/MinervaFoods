@@ -12,5 +12,5 @@ export interface Comprador {
   estado?: string;
   cep?: string;
   pais?: string;
-  dataNascimento?: string; 
+  dataNascimento?: string|null; 
 }

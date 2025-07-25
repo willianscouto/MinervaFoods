@@ -41,7 +41,7 @@ export default function MinervaFoodsLayout({ children }: { children: ReactNode }
         <Toolbar />
         <List>
           <ListItem disablePadding>
-            <ListItemButton component={Link} href="/home/page">
+            <ListItemButton component={Link} href="/home">
               <ListItemText primary="Home" />
             </ListItemButton>
           </ListItem>

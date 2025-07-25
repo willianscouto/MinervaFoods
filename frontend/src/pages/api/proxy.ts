@@ -17,6 +17,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
   try {
 
+    console.log("dtaa", data);
     const response = await axios.request({
       url: `${API_URL}/${path}`,
       method,

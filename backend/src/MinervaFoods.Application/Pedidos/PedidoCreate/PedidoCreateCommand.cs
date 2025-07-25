@@ -37,7 +37,7 @@ namespace MinervaFoods.Application.Pedidos.PedidoCreate
         /// <summary>
         /// Observacao do pedido.
         /// </summary>
-        public string Observacao{ get; set; } = string.Empty;
+        public string? Observacao { get; set; }
 
 
         /// <summary>
